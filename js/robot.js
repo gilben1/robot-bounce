@@ -7,6 +7,9 @@ class Robot {
         app.stage.addChild(this.sprite);
     }
 
+    /**
+     * Returns position of the Robot's sprite as {x,y}
+     */
     get getPos() {
         return {
             x: this.sprite.x,
@@ -14,13 +17,30 @@ class Robot {
         };
     }
 
+    /**
+     * Sets the x y coordinates of the sprite
+     * @param {Integer} x 
+     * @param {Integer} y 
+     */
     setPos(x, y) {
         this.sprite.x = x;
         this.sprite.y = y;
     }
 
+    /**
+     * Adds the passed values to the x y coordinates of the sprite
+     * @param {Integer} x 
+     * @param {Integer} y 
+     */
     add(x, y) {
         this.sprite.x += x;
         this.sprite.y += y;
+    }
+
+    /**
+     * Toggles the visible state of the Robot's sprite
+     */
+    showHide() {
+        this.sprite.visible = !this.sprite.visible;
     }
 }

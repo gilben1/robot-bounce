@@ -6,13 +6,14 @@ let Application = PIXI.Application,
     TextureCache = PIXI.utils.TextureCache;
 let id;
 let robots = {};
+let targets = {};
 
 let type = "WebGL"
 if(!PIXI.utils.isWebGLSupported()){
     type = "canvas"
 }
-
 PIXI.utils.sayHello(type)
+
 //Create a Pixi Application
 let app = new Application({
     width: 512, 
@@ -20,10 +21,11 @@ let app = new Application({
     transparent: true
 });
 
+// Add the application view to the html after the window has loaded
 window.onload = function(){
+    console.log("Appending app.view to document body...")
     document.body.appendChild(app.view);
 };
-//Add the canvas that Pixi automatically created for you to the HTML document
 
 loader
     .add("img/spritesheet.json")
@@ -56,14 +58,24 @@ function gameloop(delta) {
         if (robot.getPos.y > app.view.height) {
             robot.add(0, robot.getPos.y * -1)
         }
-        robot.add(32, 32)
+        robot.add(1, 1);
     }
 }
 
+/**
+ * Generates a random number between min and max
+ * @param {string} min - Lower bound
+ * @param {Integer} max - Upper bound
+ */
 function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+/**
+ * Renders a 16 x 16 grid of tiles
+ * @param {Object} app - PIXI.Application to render onto
+ * @param {Object} id - resources cache to load from, usually created by PIXI.loader.resources["path/filename.json"].textures
+ */
 function renderTiles(app, id) {
     for (i = 0; i < 16; i++) {
         for (j = 0; j < 16; j++) {
