@@ -1,3 +1,4 @@
+console.log("Loaded keyboard.js")
 // Keyboard function from PixiJS tutorial
 function keyboard(value) {
   let key = {};

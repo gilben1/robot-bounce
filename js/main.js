@@ -5,10 +5,12 @@ let Application = PIXI.Application,
     resources = PIXI.loader.resources,
     Sprite = PIXI.Sprite,
     Rectangle = PIXI.Rectangle,
-    TextureCache = PIXI.utils.TextureCache;
+    TextureCache = PIXI.utils.TextureCache,
+    Text = PIXI.Text;
 let id;
 let robots = {};
-var activeRobot;
+let activeRobot;
+let activeText;
 let targets = {};
 
 let type = "WebGL"
@@ -20,7 +22,7 @@ PIXI.utils.sayHello(type)
 //Create a Pixi Application
 let app = new Application({
     width: 512, 
-    height: 512,
+    height: 544,
     transparent: true
 });
 
@@ -29,7 +31,6 @@ window.onload = function(){
     console.log("Appending app.view to document body...")
     document.body.appendChild(app.view);
 };
-
 
 loader
     .add("img/spritesheet.json")
@@ -45,10 +46,15 @@ function setup() {
     id = resources["img/spritesheet.json"].textures;
     renderTiles(app, id);
 
-    robots['red'] = new Robot(app, id["robot_red.png"], 0, 0);
-    robots['blue'] = new Robot(app, id["robot_blue.png"], 32, 32);
-    robots['green'] = new Robot(app, id["robot_green.png"], 64, 64);
-    robots['yellow'] = new Robot(app, id["robot_yellow.png"], 96, 96);
+    robots['red'] = new Robot(app, id["robot_red.png"], "Red Robot", 0, 0);
+    robots['blue'] = new Robot(app, id["robot_blue.png"], "Blue Robot", 32, 32);
+    robots['green'] = new Robot(app, id["robot_green.png"], "Green Robot", 64, 64);
+    robots['yellow'] = new Robot(app, id["robot_yellow.png"], "Yellow Robot", 96, 96);
+    
+    activeText = new Text("None");
+    activeText.position.set(32, 512);
+
+    app.stage.addChild(activeText);
 
     app.ticker.add(delta => gameloop(delta));
 }

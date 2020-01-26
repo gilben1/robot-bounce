@@ -2,8 +2,10 @@ console.log("Loaded entity.js")
 
 class Entity {
     sprite;
-    constructor(app, sprite, x, y) {
+    name = "";
+    constructor(app, sprite, name, x, y) {
         this.sprite = new Sprite(sprite);
+        this.name = name;
         this.sprite.x = x;
         this.sprite.y = y;
         app.stage.addChild(this.sprite);
@@ -69,7 +71,7 @@ function notColliding(entities, pos) {
 function inBounds(pos) {
     if (pos.x > app.view.width - 32)    {return false}
     if (pos.x < 0)                      {return false}
-    if (pos.y > app.view.height - 32)   {return false}
+    if (pos.y > app.view.height - 64)   {return false}
     if (pos.y < 0)                      {return false}
     return true;
 }
