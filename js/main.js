@@ -37,9 +37,12 @@ function loadProgressHandler(loader, resource){
 
 function setup() {
     id = resources["img/spritesheet.json"].textures;
-    robots['red'] = new Robot(app, new Sprite(id["robot_red.png"]), 0, 0);
-    robots['blue'] = new Robot(app, new Sprite(id["robot_blue.png"]), 32, 32);
-    robots['green'] = new Robot(app, new Sprite(id["robot_green.png"]), 64, 64);
+    renderTiles(app, id);
+
+    robots['red'] = new Robot(app, id["robot_red.png"], 0, 0);
+    robots['blue'] = new Robot(app, id["robot_blue.png"], 32, 32);
+    robots['green'] = new Robot(app, id["robot_green.png"], 64, 64);
+    robots['yellow'] = new Robot(app, id["robot_yellow.png"], 96, 96);
 
     app.ticker.add(delta => gameloop(delta));
 }
@@ -53,10 +56,21 @@ function gameloop(delta) {
         if (robot.getPos.y > app.view.height) {
             robot.add(0, robot.getPos.y * -1)
         }
-        robot.add(randomInt(-2, 2), randomInt(-2, 2))
+        robot.add(32, 32)
     }
 }
 
 function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function renderTiles(app, id) {
+    for (i = 0; i < 16; i++) {
+        for (j = 0; j < 16; j++) {
+            let tile = new Sprite(id["tile.png"]);
+            tile.x = i * 32;
+            tile.y = j * 32;
+            app.stage.addChild(tile);
+        }
+    }
 }
