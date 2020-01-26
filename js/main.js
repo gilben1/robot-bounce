@@ -1,3 +1,5 @@
+console.log("Loaded main.js")
+
 let Application = PIXI.Application,
     loader = PIXI.loader,
     resources = PIXI.loader.resources,

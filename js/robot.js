@@ -1,40 +1,7 @@
-class Robot {
-    sprite;
+console.log("Loaded robot.js")
+class Robot extends Entity {
     constructor(app, sprite, x, y) {
-        this.sprite = new Sprite(sprite);
-        this.sprite.x = x;
-        this.sprite.y = y;
-        app.stage.addChild(this.sprite);
-    }
-
-    /**
-     * Returns position of the Robot's sprite as {x,y}
-     */
-    get getPos() {
-        return {
-            x: this.sprite.x,
-            y: this.sprite.y
-        };
-    }
-
-    /**
-     * Sets the x y coordinates of the sprite
-     * @param {Integer} x 
-     * @param {Integer} y 
-     */
-    setPos(x, y) {
-        this.sprite.x = x;
-        this.sprite.y = y;
-    }
-
-    /**
-     * Adds the passed values to the x y coordinates of the sprite
-     * @param {Integer} x 
-     * @param {Integer} y 
-     */
-    add(x, y) {
-        this.sprite.x += x;
-        this.sprite.y += y;
+        super(app, sprite, x, y);
     }
 
     /**
@@ -64,10 +31,4 @@ class Robot {
         }
     }
 
-    /**
-     * Toggles the visible state of the Robot's sprite
-     */
-    showHide() {
-        this.sprite.visible = !this.sprite.visible;
-    }
 }
