@@ -2,4 +2,4 @@
 A javascript robot puzzle game
 
 # Licence
-MIT License, see LICENSE.MD for details
+MIT License, see [LICENSE](LICENSE) for details
