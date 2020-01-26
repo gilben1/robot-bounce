@@ -42,5 +42,6 @@ class Robot extends Entity {
  * @param {Robot} self 
  */
 function robotSelect(eventData, self) {
+    console.log("Robot clicked!")
     activeRobot = self;
 }
