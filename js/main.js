@@ -8,6 +8,7 @@ let Application = PIXI.Application,
     TextureCache = PIXI.utils.TextureCache;
 let id;
 let robots = {};
+var activeRobot;
 let targets = {};
 
 let type = "WebGL"

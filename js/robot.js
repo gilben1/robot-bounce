@@ -1,7 +1,12 @@
 console.log("Loaded robot.js")
 class Robot extends Entity {
     constructor(app, sprite, x, y) {
-        super(app, sprite, x, y);
+        // store self to pass onto click events to refer to this object
+        let self = super(app, sprite, x, y); 
+        this.sprite.on('mousedown', function(e) {
+            robotSelect(e, self);
+        });
+        this.sprite.interactive = true;
     }
 
     /**
@@ -27,8 +32,15 @@ class Robot extends Entity {
                 console.log("Moving south");
                 break;
             default:
-                console.log("Invalid direction")
+                console.log("Invalid direction");
         }
     }
-
+}
+/**
+ * Assigns the robot that triggers this callback as the active robot
+ * @param {event} eventData 
+ * @param {Robot} self 
+ */
+function robotSelect(eventData, self) {
+    activeRobot = self;
 }

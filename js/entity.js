@@ -6,7 +6,7 @@ class Entity {
         this.sprite = new Sprite(sprite);
         this.sprite.x = x;
         this.sprite.y = y;
-        app.stage.addChild(this.sprite)
+        app.stage.addChild(this.sprite);
     }
 
     /**
