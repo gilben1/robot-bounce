@@ -58,7 +58,6 @@ function gameloop(delta) {
         if (robot.getPos.y > app.view.height) {
             robot.add(0, robot.getPos.y * -1)
         }
-        robot.add(1, 1);
     }
 }
 
@@ -77,9 +76,10 @@ function randomInt(min, max) {
  * @param {Object} id - resources cache to load from, usually created by PIXI.loader.resources["path/filename.json"].textures
  */
 function renderTiles(app, id) {
+    let tileTexture = id["tile.png"];
     for (i = 0; i < 16; i++) {
         for (j = 0; j < 16; j++) {
-            let tile = new Sprite(id["tile.png"]);
+            let tile = new Sprite(tileTexture);
             tile.x = i * 32;
             tile.y = j * 32;
             app.stage.addChild(tile);
