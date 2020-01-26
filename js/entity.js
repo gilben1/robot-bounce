@@ -46,3 +46,30 @@ class Entity {
         this.sprite.visible = !this.sprite.visible;
     }
 }
+
+/**
+ * Returns true if the attempted x/y coordinate pair is free of any entities
+ * @param {array} entities 
+ * @param {Object} pos
+ */
+function notColliding(entities, pos) {
+    for (e in entities) {
+        let entity = entities[e];
+        if (entity.getPos.x === pos.x && entity.getPos.y === pos.y) {
+            return false;
+        }
+    }
+    return true;
+}
+
+/**
+ * Returns true if the x/y coordinate pair is within the bounds of the app view
+ * @param {Object} pos  - x/y coordinate object
+ */
+function inBounds(pos) {
+    if (pos.x > app.view.width - 32)    {return false}
+    if (pos.x < 0)                      {return false}
+    if (pos.y > app.view.height - 32)   {return false}
+    if (pos.y < 0)                      {return false}
+    return true;
+}
