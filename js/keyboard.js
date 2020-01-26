@@ -49,7 +49,7 @@ function keyboard(value) {
 function keyMove(dir) {
     console.log("keypress!")
     if (activeRobot !== undefined) {
-        activeRobot.move(dir);
+        while(activeRobot.move(dir)) {}
     }
     else {
         console.log("can't move " + dir + " no active robot selected");

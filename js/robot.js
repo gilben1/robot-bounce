@@ -23,40 +23,45 @@ class Robot extends Entity {
                 if (notColliding(robots, north) && inBounds(north)) {
                     this.add(0, -32);
                     console.log("Moving north");
+                    return true;
                 }
                 else {
                     console.log("blocked")
+                    return false;
                 }
-                break;
             case "e":
                 if (notColliding(robots, east) && inBounds(east)) {
                     this.add(32, 0);
                     console.log("Moving east");
+                    return true;
                 }
                 else {
                     console.log("blocked")
+                    return false;
                 }
-                break;
             case "w":
                 if (notColliding(robots, west) && inBounds(west)) {
                     this.add(-32, 0);
                     console.log("Moving west");
+                    return true;
                 }
                 else {
                     console.log("blocked")
+                    return false;
                 }
-                break;
             case "s":
                 if (notColliding(robots, south) && inBounds(south)) {
                     this.add(0,32);
                     console.log("Moving south");
+                    return true;
                 }
                 else {
                     console.log("blocked")
+                    return false;
                 }
-                break;
             default:
                 console.log("Invalid direction");
+                return false;
         }
     }
 }
