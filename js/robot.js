@@ -18,6 +18,13 @@ class Robot extends Entity {
         let south = {x: this.sprite.x, y: this.sprite.y + 32};
         let east = {x: this.sprite.x + 32, y: this.sprite.y};
         let west = {x: this.sprite.x - 32, y: this.sprite.y};
+
+        // If there's a wall at this tile, resolve it before continuing
+        let localWall = getEntitiesAt(walls, this.getPos);
+        if (localWall !== null && localWall.collides(dir)) {
+            return false;
+        }
+
         switch(dir) {
             case "n":
                 if (notColliding(robots, north) && inBounds(north)) {
@@ -63,6 +70,16 @@ class Robot extends Entity {
                 console.log("Invalid direction");
                 return false;
         }
+    }
+
+    wallAtCurrentPos() {
+        for (w in walls) {
+            let wall = walls[w];
+            if (wall.getPos == this.getPos) {
+                return wall;
+            }
+        }
+        return null
     }
 }
 

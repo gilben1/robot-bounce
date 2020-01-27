@@ -75,3 +75,13 @@ function inBounds(pos) {
     if (pos.y < 0)                      {return false}
     return true;
 }
+
+function getEntitiesAt(entities, pos) {
+    for (e in entities) {
+        let entity = entities[e];
+        if (entity.getPos.x === pos.x && entity.getPos.y === pos.y) {
+            return entity;
+        }
+    }
+    return null;
+}

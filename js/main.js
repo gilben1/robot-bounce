@@ -12,6 +12,7 @@ let robots = {};
 let activeRobot;
 let activeText;
 let targets = {};
+let walls = {};
 
 let type = "WebGL"
 if(!PIXI.utils.isWebGLSupported()){
@@ -51,6 +52,13 @@ function setup() {
     robots['green'] = new Robot(app, id["robot_green.png"], "Green Robot", 64, 64);
     robots['yellow'] = new Robot(app, id["robot_yellow.png"], "Yellow Robot", 96, 96);
     
+    walls[0] = new Wall(app, id["wall_east.png"], "e", 32, 0);
+    walls[1] = new Wall(app, id["wall_west.png"], "w", 64, 0);
+    walls[2] = new Wall(app, id["wall_northeast.png"], "ne", 128, 96);
+    walls[3] = new Wall(app, id["wall_south.png"], "s", 128, 64);
+    walls[4] = new Wall(app, id["wall_west.png"], "w", 160, 96)
+
+
     activeText = new Text("None");
     activeText.position.set(32, 512);
 
@@ -60,15 +68,6 @@ function setup() {
 }
 
 function gameloop(delta) {
-    for (r in robots) {
-        let robot = robots[r];
-        if (robot.getPos.x > app.view.width) {
-            robot.add(robot.getPos.x * -1, 0);
-        }
-        if (robot.getPos.y > app.view.height) {
-            robot.add(0, robot.getPos.y * -1)
-        }
-    }
 }
 
 /**
