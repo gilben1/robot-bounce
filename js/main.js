@@ -47,16 +47,16 @@ function setup() {
     id = resources["img/spritesheet.json"].textures;
     renderTiles(app, id);
 
-    robots['red'] = new Robot(app, id["robot_red.png"], "Red Robot", 0, 0);
-    robots['blue'] = new Robot(app, id["robot_blue.png"], "Blue Robot", 32, 32);
-    robots['green'] = new Robot(app, id["robot_green.png"], "Green Robot", 64, 64);
-    robots['yellow'] = new Robot(app, id["robot_yellow.png"], "Yellow Robot", 96, 96);
+    robots['red'] = new Robot(app.stage, id["robot_red.png"], "Red Robot", 0, 0);
+    robots['blue'] = new Robot(app.stage, id["robot_blue.png"], "Blue Robot", 32, 32);
+    robots['green'] = new Robot(app.stage, id["robot_green.png"], "Green Robot", 64, 64);
+    robots['yellow'] = new Robot(app.stage, id["robot_yellow.png"], "Yellow Robot", 96, 96);
     
-    walls[0] = new Wall(app, id["wall_east.png"], "e", 32, 0);
-    walls[1] = new Wall(app, id["wall_west.png"], "w", 64, 0);
-    walls[2] = new Wall(app, id["wall_northeast.png"], "ne", 128, 96);
-    walls[3] = new Wall(app, id["wall_south.png"], "s", 128, 64);
-    walls[4] = new Wall(app, id["wall_west.png"], "w", 160, 96)
+    walls[0] = new Wall(app.stage, id["wall_east.png"], "e", 32, 0);
+    walls[1] = new Wall(app.stage, id["wall_west.png"], "w", 64, 0);
+    walls[2] = new Wall(app.stage, id["wall_northeast.png"], "ne", 128, 96);
+    walls[3] = new Wall(app.stage, id["wall_south.png"], "s", 128, 64);
+    walls[4] = new Wall(app.stage, id["wall_west.png"], "w", 160, 96)
 
 
     activeText = new Text("None");

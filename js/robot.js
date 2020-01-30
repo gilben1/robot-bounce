@@ -1,8 +1,8 @@
 console.log("Loaded robot.js")
 class Robot extends Entity {
-    constructor(app, sprite, name, x, y) {
+    constructor(container, sprite, name, x, y) {
         // store self to pass onto click events to refer to this object
-        let self = super(app, sprite, name, x, y); 
+        let self = super(container, sprite, name, x, y); 
         this.sprite.on('mousedown', function(e) {
             robotSelect(e, self);
         });

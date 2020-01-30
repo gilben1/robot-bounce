@@ -1,6 +1,6 @@
 class Wall extends Entity {
-    constructor(app, sprite, name, x, y) {
-        super(app, sprite, name, x, y); 
+    constructor(container, sprite, name, x, y) {
+        super(container, sprite, name, x, y); 
     }
 
     collides(dir) {
