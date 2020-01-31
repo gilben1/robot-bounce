@@ -38,6 +38,7 @@ window.onload = function(){
     document.body.appendChild(app.view);
 };
 
+
 loader
     .add("img/spritesheet.json")
     .on("progress", loadProgressHandler)
@@ -49,9 +50,10 @@ function loadProgressHandler(loader, resource){
 }
 
 function setup() {
-    move = new Container();
 
+    move = new Container();
     id = resources["img/spritesheet.json"].textures;
+    loadWalls(move, id)
     renderTiles(move, id);
 
     robots['red'] = new Robot(move, id["robot_red.png"], "Red Robot", 0, 0);
@@ -59,11 +61,11 @@ function setup() {
     robots['green'] = new Robot(move, id["robot_green.png"], "Green Robot", 64, 64);
     robots['yellow'] = new Robot(move, id["robot_yellow.png"], "Yellow Robot", 96, 96);
     
-    walls[0] = new Wall(move, id["wall_east.png"], "e", 32, 0);
+    /*walls[0] = new Wall(move, id["wall_east.png"], "e", 32, 0);
     walls[1] = new Wall(move, id["wall_west.png"], "w", 64, 0);
     walls[2] = new Wall(move, id["wall_northeast.png"], "ne", 128, 96);
     walls[3] = new Wall(move, id["wall_south.png"], "s", 128, 64);
-    walls[4] = new Wall(move, id["wall_west.png"], "w", 160, 96)
+    walls[4] = new Wall(move, id["wall_west.png"], "w", 160, 96)*/
 
 
     activeText = new Text("None");
@@ -106,4 +108,62 @@ function renderTiles(container, id) {
             container.addChild(tile);
         }
     }
+}
+
+function loadWalls(move, id) {
+    fetch('data/grid.txt')
+        .then((response) => response.text())
+        .then((text) => fillWalls(text, move, id))
+}
+
+function fillWalls(text, move, id) {
+    let blocks = text.split('\n');
+    let bat = "";
+    let index = 0;
+    let ht = 0;
+    for(block in blocks) {
+        for (i = 0; i < 32; i += 2) {
+            let bit = blocks[block].substring(i, i + 2);
+            bat += bit;
+            let x = i * 16;
+            let y = ht * 32;
+            switch(bit) {
+                case "n-":
+                    walls[index] = new Wall(move, id["wall_north.png"], "n", x, y);
+                    index++;
+                    break;
+                case "nw":
+                    walls[index] = new Wall(move, id["wall_northwest.png"], "nw", x, y);
+                    index++;
+                    break;
+                case "ne":
+                    walls[index] = new Wall(move, id["wall_northeast.png"], "ne", x, y);
+                    index++;
+                    break;
+                case "s-":
+                    walls[index] = new Wall(move, id["wall_south.png"], "s", x, y);
+                    index++;
+                    break;
+                case "sw":
+                    walls[index] = new Wall(move, id["wall_southwest.png"], "sw", x, y);
+                    index++;
+                    break;
+                case "se":
+                    walls[index] = new Wall(move, id["wall_southeast.png"], "se", x, y);
+                    index++;
+                    break;
+                case "-w":
+                    walls[index] = new Wall(move, id["wall_west.png"], "w", x, y);
+                    index++;
+                    break;
+                case "-e":
+                    walls[index] = new Wall(move, id["wall_east.png"], "e", x, y);
+                    index++;
+                    break;
+            }
+        }
+        bat += "\n";
+        ht++;
+    }
+    console.log(bat);
 }
