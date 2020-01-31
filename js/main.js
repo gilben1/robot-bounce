@@ -1,18 +1,23 @@
 console.log("Loaded main.js")
 
+// PIXI Aliases
 let Application = PIXI.Application,
     loader = PIXI.loader,
     resources = PIXI.loader.resources,
     Sprite = PIXI.Sprite,
     Rectangle = PIXI.Rectangle,
     TextureCache = PIXI.utils.TextureCache,
-    Text = PIXI.Text;
+    Text = PIXI.Text,
+    Container = PIXI.Container;
+
 let id;
 let robots = {};
 let activeRobot;
 let activeText;
 let targets = {};
 let walls = {};
+let state;
+let menu, move, rewind;
 
 let type = "WebGL"
 if(!PIXI.utils.isWebGLSupported()){
@@ -44,30 +49,37 @@ function loadProgressHandler(loader, resource){
 }
 
 function setup() {
-    id = resources["img/spritesheet.json"].textures;
-    renderTiles(app, id);
+    move = new Container();
 
-    robots['red'] = new Robot(app.stage, id["robot_red.png"], "Red Robot", 0, 0);
-    robots['blue'] = new Robot(app.stage, id["robot_blue.png"], "Blue Robot", 32, 32);
-    robots['green'] = new Robot(app.stage, id["robot_green.png"], "Green Robot", 64, 64);
-    robots['yellow'] = new Robot(app.stage, id["robot_yellow.png"], "Yellow Robot", 96, 96);
+    id = resources["img/spritesheet.json"].textures;
+    renderTiles(move, id);
+
+    robots['red'] = new Robot(move, id["robot_red.png"], "Red Robot", 0, 0);
+    robots['blue'] = new Robot(move, id["robot_blue.png"], "Blue Robot", 32, 32);
+    robots['green'] = new Robot(move, id["robot_green.png"], "Green Robot", 64, 64);
+    robots['yellow'] = new Robot(move, id["robot_yellow.png"], "Yellow Robot", 96, 96);
     
-    walls[0] = new Wall(app.stage, id["wall_east.png"], "e", 32, 0);
-    walls[1] = new Wall(app.stage, id["wall_west.png"], "w", 64, 0);
-    walls[2] = new Wall(app.stage, id["wall_northeast.png"], "ne", 128, 96);
-    walls[3] = new Wall(app.stage, id["wall_south.png"], "s", 128, 64);
-    walls[4] = new Wall(app.stage, id["wall_west.png"], "w", 160, 96)
+    walls[0] = new Wall(move, id["wall_east.png"], "e", 32, 0);
+    walls[1] = new Wall(move, id["wall_west.png"], "w", 64, 0);
+    walls[2] = new Wall(move, id["wall_northeast.png"], "ne", 128, 96);
+    walls[3] = new Wall(move, id["wall_south.png"], "s", 128, 64);
+    walls[4] = new Wall(move, id["wall_west.png"], "w", 160, 96)
 
 
     activeText = new Text("None");
     activeText.position.set(32, 512);
 
-    app.stage.addChild(activeText);
+    move.addChild(activeText);
+    app.stage.addChild(move);
+
+    state = move;
 
     app.ticker.add(delta => gameloop(delta));
 }
 
 function gameloop(delta) {
+    if (state === move) {
+    }
 }
 
 /**
@@ -84,14 +96,14 @@ function randomInt(min, max) {
  * @param {Object} app - PIXI.Application to render onto
  * @param {Object} id - resources cache to load from, usually created by PIXI.loader.resources["path/filename.json"].textures
  */
-function renderTiles(app, id) {
+function renderTiles(container, id) {
     let tileTexture = id["tile.png"];
     for (i = 0; i < 16; i++) {
         for (j = 0; j < 16; j++) {
             let tile = new Sprite(tileTexture);
             tile.x = i * 32;
             tile.y = j * 32;
-            app.stage.addChild(tile);
+            container.addChild(tile);
         }
     }
 }
