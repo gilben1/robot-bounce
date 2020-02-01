@@ -77,11 +77,19 @@ function inBounds(pos) {
 }
 
 function getEntitiesAt(entities, pos) {
+    let ret = {};
+    let index = 0;
     for (e in entities) {
         let entity = entities[e];
         if (entity.getPos.x === pos.x && entity.getPos.y === pos.y) {
-            return entity;
+            ret[index] = entity;
+            index++;
         }
     }
-    return null;
+    if (index === 0){
+        return null;
+    }
+    else {
+        return ret;
+    }
 }

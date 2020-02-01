@@ -56,10 +56,10 @@ function setup() {
     loadWalls(move, id)
     renderTiles(move, id);
 
-    robots['red'] = new Robot(move, id["robot_red.png"], "Red Robot", 0, 0);
-    robots['blue'] = new Robot(move, id["robot_blue.png"], "Blue Robot", 32, 32);
-    robots['green'] = new Robot(move, id["robot_green.png"], "Green Robot", 64, 64);
-    robots['yellow'] = new Robot(move, id["robot_yellow.png"], "Yellow Robot", 96, 96);
+    robots['red'] = new Robot(move, id["robot_red.png"], "Red Robot", 2 * 32, 14 * 32);
+    robots['blue'] = new Robot(move, id["robot_blue.png"], "Blue Robot", 13 * 32, 1 * 32);
+    robots['green'] = new Robot(move, id["robot_green.png"], "Green Robot", 11 * 32, 13 * 32);
+    robots['yellow'] = new Robot(move, id["robot_yellow.png"], "Yellow Robot", 3 * 32, 1 * 32);
     
     activeText = new Text("None");
     activeText.position.set(32, 512);

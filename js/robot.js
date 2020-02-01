@@ -20,9 +20,11 @@ class Robot extends Entity {
         let west = {x: this.sprite.x - 32, y: this.sprite.y};
 
         // If there's a wall at this tile, resolve it before continuing
-        let localWall = getEntitiesAt(walls, this.getPos);
-        if (localWall !== null && localWall.collides(dir)) {
-            return false;
+        let localWalls = getEntitiesAt(walls, this.getPos);
+        for (let w in localWalls) {
+            if (localWalls[w] !== null && localWalls[w].collides(dir)) {
+                return false;
+            }
         }
 
         switch(dir) {
