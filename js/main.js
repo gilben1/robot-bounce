@@ -11,13 +11,19 @@ let Application = PIXI.Application,
     Container = PIXI.Container;
 
 let id;
-let robots = {};
 let activeRobot;
 let activeText;
-let targets = {};
-let walls = {};
-let state;
+let activeTarget;
+
+let moveCount = 0;
+let moveText;
+
+// Collections
+let robots = {}, targets = {}, walls = {};
+// Containers
 let menu, move, rewind, robotCont, targetCont, wallCont, tileCont;
+
+let state;
 
 let type = "WebGL"
 if(!PIXI.utils.isWebGLSupported()){
@@ -70,7 +76,11 @@ function setup() {
     activeText = new Text("None");
     activeText.position.set(32, 512);
 
+    moveText = new Text("Moves: " + moveCount);
+    moveText.position.set(256, 512);
+
     move.addChild(activeText);
+    move.addChild(moveText);
     move.addChild(tileCont);
     move.addChild(targetCont);
     move.addChild(robotCont);
@@ -85,6 +95,7 @@ function setup() {
 
 function gameloop(delta) {
     if (state === move) {
+        moveText.text = "Moves: " + moveCount;
     }
 }
 

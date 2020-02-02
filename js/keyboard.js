@@ -65,13 +65,25 @@ let rightKey = keyboard("ArrowRight");
 
 upKey.press = ()  => {
     keyMove('n');
+    if (state === move) {
+      moveCount++;
+    }
 };
 downKey.press = ()  => {
     keyMove('s');
+    if (state === move) {
+      moveCount++;
+    }
 };
 leftKey.press = ()  => {
     keyMove('w');
+    if (state === move) {
+      moveCount++;
+    }
 };
 rightKey.press = ()  => {
     keyMove('e');
+    if (state === move) {
+      moveCount++;
+    }
 };
