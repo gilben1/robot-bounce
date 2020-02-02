@@ -83,6 +83,12 @@ class Robot extends Entity {
         }
         return null
     }
+
+    atCorrectTarget(target) {
+        let targetColor = target.name[target.name.length - 1];
+        let thisColor = this.name[0];
+        return (thisColor === targetColor) && this.samePosition(target);
+    }
 }
 
 /**

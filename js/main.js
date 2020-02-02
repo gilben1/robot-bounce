@@ -68,10 +68,10 @@ function setup() {
     loadEntities(fillTargets, 'data/targets.txt', targetCont, id);
     loadEntities(fillWalls, 'data/grid.txt', wallCont, id);
 
-    robots['red'] = new Robot(robotCont, id["robot_red.png"], "Red Robot", 2 * 32, 14 * 32);
-    robots['blue'] = new Robot(robotCont, id["robot_blue.png"], "Blue Robot", 13 * 32, 1 * 32);
-    robots['green'] = new Robot(robotCont, id["robot_green.png"], "Green Robot", 11 * 32, 13 * 32);
-    robots['yellow'] = new Robot(robotCont, id["robot_yellow.png"], "Yellow Robot", 3 * 32, 1 * 32);
+    robots['red'] = new Robot(robotCont, id["robot_red.png"], "red Robot", 2 * 32, 14 * 32);
+    robots['blue'] = new Robot(robotCont, id["robot_blue.png"], "blue Robot", 13 * 32, 1 * 32);
+    robots['green'] = new Robot(robotCont, id["robot_green.png"], "green Robot", 11 * 32, 13 * 32);
+    robots['yellow'] = new Robot(robotCont, id["robot_yellow.png"], "yellow Robot", 3 * 32, 1 * 32);
     
 
     activeText = new Text("None");
@@ -100,7 +100,7 @@ function gameloop(delta) {
         activeTarget = targets[0]
         if (activeTarget !== undefined && activeRobot !== undefined) {
             activeTarget.showMirror()
-            if (activeRobot.samePosition(activeTarget)) {
+            if (activeRobot.atCorrectTarget(activeTarget)) {
                 console.log("you win!")
             }
         }
