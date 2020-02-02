@@ -73,6 +73,7 @@ function setup() {
     robots['green'] = new Robot(robotCont, id["robot_green.png"], "Green Robot", 11 * 32, 13 * 32);
     robots['yellow'] = new Robot(robotCont, id["robot_yellow.png"], "Yellow Robot", 3 * 32, 1 * 32);
     
+
     activeText = new Text("None");
     activeText.position.set(32, 512);
 
@@ -96,6 +97,10 @@ function setup() {
 function gameloop(delta) {
     if (state === move) {
         moveText.text = "Moves: " + moveCount;
+        activeTarget = targets[0]
+        if (activeTarget !== undefined) {
+            activeTarget.mirror.visible = true;
+        }
     }
 }
 
