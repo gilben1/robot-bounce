@@ -93,3 +93,9 @@ function getEntitiesAt(entities, pos) {
         return ret;
     }
 }
+
+function loadEntities(func, file, cont, id) {
+    fetch(file)
+        .then((response) => response.text())
+        .then((text) => func(text, cont, id))
+}

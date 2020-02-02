@@ -17,7 +17,7 @@ let activeText;
 let targets = {};
 let walls = {};
 let state;
-let menu, move, rewind;
+let menu, move, rewind, robotCont, targetCont, wallCont, tileCont;
 
 let type = "WebGL"
 if(!PIXI.utils.isWebGLSupported()){
@@ -52,19 +52,30 @@ function loadProgressHandler(loader, resource){
 function setup() {
 
     move = new Container();
-    id = resources["img/spritesheet.json"].textures;
-    loadWalls(move, id)
-    renderTiles(move, id);
+    robotCont = new Container();
+    targetCont = new Container();
+    wallCont = new Container();
+    tileCont = new Container();
 
-    robots['red'] = new Robot(move, id["robot_red.png"], "Red Robot", 2 * 32, 14 * 32);
-    robots['blue'] = new Robot(move, id["robot_blue.png"], "Blue Robot", 13 * 32, 1 * 32);
-    robots['green'] = new Robot(move, id["robot_green.png"], "Green Robot", 11 * 32, 13 * 32);
-    robots['yellow'] = new Robot(move, id["robot_yellow.png"], "Yellow Robot", 3 * 32, 1 * 32);
+    id = resources["img/spritesheet.json"].textures;
+    renderTiles(tileCont, id);
+    loadEntities(fillTargets, 'data/targets.txt', targetCont, id);
+    loadEntities(fillWalls, 'data/grid.txt', wallCont, id);
+
+    robots['red'] = new Robot(robotCont, id["robot_red.png"], "Red Robot", 2 * 32, 14 * 32);
+    robots['blue'] = new Robot(robotCont, id["robot_blue.png"], "Blue Robot", 13 * 32, 1 * 32);
+    robots['green'] = new Robot(robotCont, id["robot_green.png"], "Green Robot", 11 * 32, 13 * 32);
+    robots['yellow'] = new Robot(robotCont, id["robot_yellow.png"], "Yellow Robot", 3 * 32, 1 * 32);
     
     activeText = new Text("None");
     activeText.position.set(32, 512);
 
     move.addChild(activeText);
+    move.addChild(tileCont);
+    move.addChild(targetCont);
+    move.addChild(robotCont);
+    move.addChild(wallCont);
+
     app.stage.addChild(move);
 
     state = move;

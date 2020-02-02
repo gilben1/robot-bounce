@@ -8,13 +8,8 @@ class Wall extends Entity {
     }
 }
 
-function loadWalls(move, id) {
-    fetch('data/grid.txt')
-        .then((response) => response.text())
-        .then((text) => fillWalls(text, move, id))
-}
 
-function fillWalls(text, move, id) {
+function fillWalls(text, cont, id) {
     let blocks = text.split('\n');
     let bat = "";
     let index = 0;
@@ -25,54 +20,20 @@ function fillWalls(text, move, id) {
             bat += bit;
             let x = i * 16;
             let y = ht * 32;
-            /*switch(bit) {
-                case "n-":
-                    walls[index] = new Wall(move, id["wall_north.png"], "n", x, y);
-                    index++;
-                    break;
-                case "nw":
-                    walls[index] = new Wall(move, id["wall_northwest.png"], "nw", x, y);
-                    index++;
-                    break;
-                case "ne":
-                    walls[index] = new Wall(move, id["wall_northeast.png"], "ne", x, y);
-                    index++;
-                    break;
-                case "s-":
-                    walls[index] = new Wall(move, id["wall_south.png"], "s", x, y);
-                    index++;
-                    break;
-                case "sw":
-                    walls[index] = new Wall(move, id["wall_southwest.png"], "sw", x, y);
-                    index++;
-                    break;
-                case "se":
-                    walls[index] = new Wall(move, id["wall_southeast.png"], "se", x, y);
-                    index++;
-                    break;
-                case "-w":
-                    walls[index] = new Wall(move, id["wall_west.png"], "w", x, y);
-                    index++;
-                    break;
-                case "-e":
-                    walls[index] = new Wall(move, id["wall_east.png"], "e", x, y);
-                    index++;
-                    break;
-            }*/
                 if (bit.includes('n')) {
-                    walls[index] = new Wall(move, id["wall_north.png"], "n", x, y);
+                    walls[index] = new Wall(cont, id["wall_north.png"], "n", x, y);
                     index++;
                 }
                 if (bit.includes('s')) {
-                    walls[index] = new Wall(move, id["wall_south.png"], "s", x, y);
+                    walls[index] = new Wall(cont, id["wall_south.png"], "s", x, y);
                     index++;
                 }
                 if (bit.includes('w')) {
-                    walls[index] = new Wall(move, id["wall_west.png"], "w", x, y);
+                    walls[index] = new Wall(cont, id["wall_west.png"], "w", x, y);
                     index++;
                 }
                 if (bit.includes('e')) {
-                    walls[index] = new Wall(move, id["wall_east.png"], "e", x, y);
+                    walls[index] = new Wall(cont, id["wall_east.png"], "e", x, y);
                     index++;
                 }
         }
