@@ -87,6 +87,9 @@ function setup() {
     move.addChild(robotCont);
     move.addChild(wallCont);
 
+
+    activeTarget = targets[-1]
+
     app.stage.addChild(move);
 
     state = move;
@@ -97,11 +100,17 @@ function setup() {
 function gameloop(delta) {
     if (state === move) {
         moveText.text = "Moves: " + moveCount;
-        activeTarget = targets[0]
+        if (activeTarget === targets[-1]) {
+            activeTarget = targets[randomInt(0, 17)]
+        }
         if (activeTarget !== undefined && activeRobot !== undefined) {
             activeTarget.showMirror()
             if (activeRobot.atCorrectTarget(activeTarget)) {
-                console.log("you win!")
+                activeTarget.hideMirror()
+                activeTarget = targets[randomInt(0, 17)]
+                activeTarget.showMirror()
+                moveCount = 0;
+                console.log("gotten");
             }
         }
     }
