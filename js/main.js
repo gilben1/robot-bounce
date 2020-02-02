@@ -98,8 +98,11 @@ function gameloop(delta) {
     if (state === move) {
         moveText.text = "Moves: " + moveCount;
         activeTarget = targets[0]
-        if (activeTarget !== undefined) {
-            activeTarget.mirror.visible = true;
+        if (activeTarget !== undefined && activeRobot !== undefined) {
+            activeTarget.showMirror()
+            if (activeRobot.samePosition(activeTarget)) {
+                console.log("you win!")
+            }
         }
     }
 }

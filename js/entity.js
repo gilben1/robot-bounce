@@ -47,6 +47,10 @@ class Entity {
     showHide() {
         this.sprite.visible = !this.sprite.visible;
     }
+
+    samePosition(other) {
+        return (this.getPos.x === other.getPos.x) && (this.getPos.y === other.getPos.y)
+    }
 }
 
 /**

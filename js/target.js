@@ -4,13 +4,21 @@ class Target extends Entity{
     constructor(container, sprite, name, x, y) {
         super(container, sprite, name, x, y);
         this.mirror = new Sprite(sprite); // make a copy we can use to show in the center
-        this.mirror.position.set(256, 256);
+        this.mirror.position.set(240, 240);
         this.mirror.visible = false;
         container.addChild(this.mirror);
     }
 
     toggleMirror() {
         this.mirror.visible = !this.mirror.visible;
+    }
+
+    showMirror() {
+        this.mirror.visible = true;
+    }
+
+    hideMirror() {
+        this.mirror.visible = false;
     }
 }
 
