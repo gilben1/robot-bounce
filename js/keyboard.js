@@ -51,6 +51,7 @@ function keyMove(dir) {
     console.log("keypress!")
     if (activeRobot !== undefined) {
         while(activeRobot.move(dir)) {}
+        moveCount++;
     }
     else {
         console.log("can't move " + dir + " no active robot selected");
@@ -64,26 +65,22 @@ let leftKey = keyboard("ArrowLeft");
 let rightKey = keyboard("ArrowRight");
 
 upKey.press = ()  => {
-    keyMove('n');
     if (state === move) {
-      moveCount++;
+      keyMove('n');
     }
 };
 downKey.press = ()  => {
-    keyMove('s');
     if (state === move) {
-      moveCount++;
+      keyMove('s');
     }
 };
 leftKey.press = ()  => {
-    keyMove('w');
     if (state === move) {
-      moveCount++;
+      keyMove('w');
     }
 };
 rightKey.press = ()  => {
-    keyMove('e');
     if (state === move) {
-      moveCount++;
+      keyMove('e');
     }
 };
