@@ -1,4 +1,10 @@
 console.log("Loaded robot.js")
+
+/**
+ * Global variables pertaining to Robots
+ */
+let activeRobot;
+
 class Robot extends Entity {
     constructor(container, sprite, name, x, y) {
         // store self to pass onto click events to refer to this object
@@ -91,12 +97,12 @@ class Robot extends Entity {
     }
 }
 
+
 /**
  * Assigns the robot that triggers this callback as the active robot
  * @param {event} eventData 
  * @param {Robot} self 
  */
 function robotSelect(eventData, self) {
-    activeText.text = self.name;
     activeRobot = self;
 }

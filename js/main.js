@@ -11,9 +11,7 @@ let Application = PIXI.Application,
     Container = PIXI.Container;
 
 let id;
-let activeRobot;
 let activeText;
-let activeTarget;
 
 let moveCount = 0;
 let moveText;
@@ -104,6 +102,7 @@ function gameloop(delta) {
             activeTarget = targets[randomInt(0, 17)]
         }
         if (activeTarget !== undefined && activeRobot !== undefined) {
+            activeText.text = activeRobot.name;
             activeTarget.showMirror()
             if (activeRobot.atCorrectTarget(activeTarget)) {
                 activeTarget.hideMirror()

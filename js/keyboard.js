@@ -63,6 +63,7 @@ let upKey = keyboard("ArrowUp");
 let downKey = keyboard("ArrowDown");
 let leftKey = keyboard("ArrowLeft");
 let rightKey = keyboard("ArrowRight");
+let tabKey = keyboard("Tab");
 
 upKey.press = ()  => {
     if (state === move) {
@@ -84,3 +85,20 @@ rightKey.press = ()  => {
       keyMove('e');
     }
 };
+tabKey.press = () => {
+  switch(activeRobot) {
+    case robots['red']:
+      activeRobot = robots['blue'];
+      break;
+    case robots['blue']:
+      activeRobot = robots['green'];
+      break;
+    case robots['green']:
+      activeRobot = robots['yellow'];
+      break;
+    case undefined:
+    case robots['yellow']:
+      activeRobot = robots['red'];
+      break;
+  }
+}

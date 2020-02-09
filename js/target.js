@@ -1,4 +1,10 @@
 console.log("Loaded target.js")
+
+/**
+ * Global variables pertaining to targets
+ */
+let activeTarget;
+
 class Target extends Entity{
     mirror
     constructor(container, sprite, name, x, y) {
