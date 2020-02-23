@@ -21,6 +21,10 @@ let robots = {}, targets = {}, walls = {};
 // Containers
 let menu, move, rewind, robotCont, targetCont, wallCont, tileCont;
 
+// Scoreboard for tracking
+let scoreBoard;
+
+
 let state;
 
 let type = "WebGL"
@@ -40,6 +44,7 @@ let app = new Application({
 window.onload = function(){
     console.log("Appending app.view to document body...")
     document.body.appendChild(app.view);
+    scoreBoard = new Score();
 };
 
 
@@ -97,7 +102,7 @@ function setup() {
 
 function gameloop(delta) {
     if (state === move) {
-        moveText.text = "Moves: " + moveCount;
+        moveText.text = "Moves: " + scoreBoard.activeScore;
         if (activeTarget === targets[-1]) {
             activeTarget = targets[randomInt(0, 17)]
         }
@@ -105,10 +110,13 @@ function gameloop(delta) {
             activeText.text = activeRobot.name;
             activeTarget.showMirror()
             if (activeRobot.atCorrectTarget(activeTarget)) {
+                scoreBoard.addScore(activeRobot, activeTarget);
+                scoreBoard.reset();
+
                 activeTarget.hideMirror()
                 activeTarget = targets[randomInt(0, 17)]
                 activeTarget.showMirror()
-                moveCount = 0;
+
                 console.log("gotten");
             }
         }

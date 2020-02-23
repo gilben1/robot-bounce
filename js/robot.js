@@ -110,7 +110,7 @@ function robotSelect(eventData, self) {
 function robotMove(dir) {
     if (activeRobot !== undefined) {
         while(activeRobot.move(dir)) {}
-        moveCount++;
+        scoreBoard.add();
     }
     else {
         console.log("can't move " + dir + " no active robot selected");
