@@ -47,16 +47,6 @@ function keyboard(value) {
   return key;
 }
 
-function keyMove(dir) {
-    console.log("keypress!")
-    if (activeRobot !== undefined) {
-        while(activeRobot.move(dir)) {}
-        moveCount++;
-    }
-    else {
-        console.log("can't move " + dir + " no active robot selected");
-    }
-}
 
 // Setup keyboard interactions
 let upKey = keyboard("ArrowUp");
@@ -67,24 +57,25 @@ let tabKey = keyboard("Tab");
 
 upKey.press = ()  => {
     if (state === move) {
-      keyMove('n');
+      robotMove('n');
     }
 };
 downKey.press = ()  => {
     if (state === move) {
-      keyMove('s');
+      robotMove('s');
     }
 };
 leftKey.press = ()  => {
     if (state === move) {
-      keyMove('w');
+      robotMove('w');
     }
 };
 rightKey.press = ()  => {
     if (state === move) {
-      keyMove('e');
+      robotMove('e');
     }
 };
+
 tabKey.press = () => {
   switch(activeRobot) {
     case robots['red']:

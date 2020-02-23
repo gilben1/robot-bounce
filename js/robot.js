@@ -106,3 +106,13 @@ class Robot extends Entity {
 function robotSelect(eventData, self) {
     activeRobot = self;
 }
+
+function robotMove(dir) {
+    if (activeRobot !== undefined) {
+        while(activeRobot.move(dir)) {}
+        moveCount++;
+    }
+    else {
+        console.log("can't move " + dir + " no active robot selected");
+    }
+}
