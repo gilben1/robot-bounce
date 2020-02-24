@@ -113,9 +113,7 @@ function gameloop(delta) {
                 scoreBoard.addScore(activeRobot, activeTarget);
                 scoreBoard.reset();
 
-                activeTarget.hideMirror()
-                activeTarget = targets[randomInt(0, 17)]
-                activeTarget.showMirror()
+                activeTarget = newTarget(activeTarget, targets);
 
                 console.log("gotten");
             }
@@ -129,7 +127,8 @@ function gameloop(delta) {
  * @param {Integer} max - Upper bound
  */
 function randomInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+    console.log(min + " " + max)
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 /**
