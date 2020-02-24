@@ -6,13 +6,18 @@ console.log("Loaded robot.js")
 let activeRobot;
 
 class Robot extends Entity {
-    constructor(container, sprite, name, x, y) {
+    checkpoint
+    constructor(container, sprite, name, displayName, x, y) {
         // store self to pass onto click events to refer to this object
-        let self = super(container, sprite, name, x, y); 
+        let self = super(container, sprite, name, displayName, x, y); 
         this.sprite.on('mousedown', function(e) {
             robotSelect(e, self);
         });
         this.sprite.interactive = true;
+        this.checkpoint = {
+            x: x,
+            y: y
+        }
     }
 
     /**
@@ -94,6 +99,23 @@ class Robot extends Entity {
         let targetColor = target.name[target.name.length - 1];
         let thisColor = this.name[0];
         return (thisColor === targetColor || targetColor === 'w') && this.samePosition(target);
+    }
+
+    /**
+     * Return to the last saved position
+     */
+    rewind(){
+        this.setPos(this.checkpoint.x, this.checkpoint.y);
+    }
+
+    /**
+     * Updates the saved position to the current position
+     */
+    updateCheckpoint() {
+        this.checkpoint = { 
+            x: this.getPos.x,
+            y: this.getPos.y
+        }
     }
 }
 

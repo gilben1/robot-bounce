@@ -1,6 +1,6 @@
 class Wall extends Entity {
-    constructor(container, sprite, name, x, y) {
-        super(container, sprite, name, x, y); 
+    constructor(container, sprite, name, displayName, x, y) {
+        super(container, sprite, name, displayName, x, y); 
     }
 
     collides(dir) {
@@ -21,19 +21,19 @@ function fillWalls(text, cont, id) {
             let x = i * 16;
             let y = ht * 32;
                 if (bit.includes('n')) {
-                    walls[index] = new Wall(cont, id["wall_north.png"], "n", x, y);
+                    walls[index] = new Wall(cont, id["wall_north.png"], "n", "North", x, y);
                     index++;
                 }
                 if (bit.includes('s')) {
-                    walls[index] = new Wall(cont, id["wall_south.png"], "s", x, y);
+                    walls[index] = new Wall(cont, id["wall_south.png"], "s", "South", x, y);
                     index++;
                 }
                 if (bit.includes('w')) {
-                    walls[index] = new Wall(cont, id["wall_west.png"], "w", x, y);
+                    walls[index] = new Wall(cont, id["wall_west.png"], "w", "West", x, y);
                     index++;
                 }
                 if (bit.includes('e')) {
-                    walls[index] = new Wall(cont, id["wall_east.png"], "e", x, y);
+                    walls[index] = new Wall(cont, id["wall_east.png"], "e", "East", x, y);
                     index++;
                 }
         }

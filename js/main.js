@@ -71,10 +71,10 @@ function setup() {
     loadEntities(fillTargets, 'data/targets.txt', targetCont, id);
     loadEntities(fillWalls, 'data/grid.txt', wallCont, id);
 
-    robots['red'] = new Robot(robotCont, id["robot_red.png"], "red Robot", 2 * 32, 14 * 32);
-    robots['blue'] = new Robot(robotCont, id["robot_blue.png"], "blue Robot", 13 * 32, 1 * 32);
-    robots['green'] = new Robot(robotCont, id["robot_green.png"], "green Robot", 11 * 32, 13 * 32);
-    robots['yellow'] = new Robot(robotCont, id["robot_yellow.png"], "yellow Robot", 3 * 32, 1 * 32);
+    robots['red'] = new Robot(robotCont, id["robot_red.png"], "red Robot", "Red Robot", 2 * 32, 14 * 32);
+    robots['blue'] = new Robot(robotCont, id["robot_blue.png"], "blue Robot", "Blue Robot", 13 * 32, 1 * 32);
+    robots['green'] = new Robot(robotCont, id["robot_green.png"], "green Robot", "Green Robot", 11 * 32, 13 * 32);
+    robots['yellow'] = new Robot(robotCont, id["robot_yellow.png"], "yellow Robot", "Yellow Robot", 3 * 32, 1 * 32);
     
 
     activeText = new Text("None");
@@ -107,7 +107,7 @@ function gameloop(delta) {
             activeTarget = targets[randomInt(0, 17)]
         }
         if (activeTarget !== undefined && activeRobot !== undefined) {
-            activeText.text = activeRobot.name;
+            activeText.text = activeRobot.displayName;
             activeTarget.showMirror()
             if (activeRobot.atCorrectTarget(activeTarget)) {
                 scoreBoard.addScore(activeRobot, activeTarget);

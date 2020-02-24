@@ -7,8 +7,8 @@ let activeTarget;
 
 class Target extends Entity{
     mirror
-    constructor(container, sprite, name, x, y) {
-        super(container, sprite, name, x, y);
+    constructor(container, sprite, name, displayName, x, y) {
+        super(container, sprite, name, displayName, x, y);
         this.mirror = new Sprite(sprite); // make a copy we can use to show in the center
         this.mirror.position.set(240, 240);
         this.mirror.visible = false;
@@ -41,6 +41,17 @@ let targetMap = {
     "w": "wild"
 }
 
+let displayMap = {
+    "r": "Red",
+    "b": "Blue",
+    "g": "Green",
+    "y": "Yellow",
+    "1": "Bolt",
+    "2": "Crescent",
+    "3": "Cross",
+    "4": "Diamond"
+}
+
 function fillTargets(text, cont, id) {
     let blocks = text.split('\n');
     let bat = "";
@@ -54,9 +65,10 @@ function fillTargets(text, cont, id) {
 
             let fileName = targetMap[bit[1]] + targetMap[bit[0]] + ".png"
             let shortName = targetMap[bit[1]] + bit[0]
+            let displayName = displayMap[bit[0]] + " " + displayMap[bit[1]]
 
             if (bit !== "--") {
-                targets[index] = new Target(cont, id[fileName], shortName, x, y);
+                targets[index] = new Target(cont, id[fileName], shortName, displayName, x, y);
                 index++;
             }
             bat += bit;

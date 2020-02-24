@@ -21,8 +21,8 @@ class Score {
     addScore(activeRobot, activeTile) {
         let scoreToAdd = {
             score: this.activeScore,
-            robot: activeRobot.name,
-            tile: activeTile.name
+            robot: activeRobot.displayName,
+            tile: activeTile.displayName
         }        
         console.log(scoreToAdd);
         this.board.push(scoreToAdd); // TODO add sorting to insert

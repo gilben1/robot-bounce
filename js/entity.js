@@ -3,9 +3,11 @@ console.log("Loaded entity.js")
 class Entity {
     sprite;
     name = "";
-    constructor(container, sprite, name, x, y) {
+    displayName = "";
+    constructor(container, sprite, name, displayName, x, y) {
         this.sprite = new Sprite(sprite);
         this.name = name;
+        this.displayName = displayName;
         this.sprite.x = x;
         this.sprite.y = y;
         container.addChild(this.sprite);
