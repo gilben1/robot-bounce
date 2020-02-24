@@ -85,16 +85,10 @@ class Robot extends Entity {
         }
     }
 
-    wallAtCurrentPos() {
-        for (w in walls) {
-            let wall = walls[w];
-            if (wall.getPos == this.getPos) {
-                return wall;
-            }
-        }
-        return null
-    }
-
+    /**
+     * Returns true if the passed target matches this Robot's color
+     * @param {Target} target 
+     */
     atCorrectTarget(target) {
         let targetColor = target.name[target.name.length - 1];
         let thisColor = this.name[0];
@@ -129,10 +123,18 @@ function robotSelect(eventData, self) {
     activeRobot = self;
 }
 
+/**
+ * Move to the passed direction until a wall or other obstacle is hit
+ * @param {string} dir 
+ */
 function robotMove(dir) {
     if (activeRobot !== undefined) {
-        while(activeRobot.move(dir)) {}
-        scoreBoard.add();
+        let moves = 0;
+        while(activeRobot.move(dir)) { moves++; }
+        // If the loop actually moved the robot, add to the move count
+        if (moves !== 0) {
+            scoreBoard.add();
+        }
     }
     else {
         console.log("can't move " + dir + " no active robot selected");
