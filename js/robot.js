@@ -140,3 +140,21 @@ function robotMove(dir) {
         console.log("can't move " + dir + " no active robot selected");
     }
 }
+
+/**
+ * Rewinds all robots to their last checkpoint
+ */
+function robotRewind() {
+    for (r in robots) {
+        robots[r].rewind();
+    }
+}
+
+/**
+ * Updates the checkpoints for all robots
+ */
+function robotUpdateCheckpoint() {
+    for (r in robots) {
+        robots[r].updateCheckpoint()
+    }
+}
