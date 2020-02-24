@@ -3,12 +3,22 @@ class Wall extends Entity {
         super(container, sprite, name, displayName, x, y); 
     }
 
+    /**
+     * Returns true if the passed direction matches the name of this wall
+     * @param {string} dir - news 
+     */
     collides(dir) {
         return this.name.includes(dir);
     }
 }
 
-
+/**
+ * Fills the Walls container with walls defined by the contents of text
+ * fills directions with n e w s for North, East, West, and South respectively
+ * @param {string} text 
+ * @param {Container} cont 
+ * @param {TextureCache} id 
+ */
 function fillWalls(text, cont, id) {
     let blocks = text.split('\n');
     let bat = "";

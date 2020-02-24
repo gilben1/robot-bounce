@@ -15,14 +15,23 @@ class Target extends Entity{
         container.addChild(this.mirror);
     }
 
+    /**
+     * Toggles the central mirror sprite
+     */
     toggleMirror() {
         this.mirror.visible = !this.mirror.visible;
     }
 
+    /**
+     * Shows the central mirror sprite
+     */
     showMirror() {
         this.mirror.visible = true;
     }
 
+    /**
+     * Hides the central mirror sprite
+     */
     hideMirror() {
         this.mirror.visible = false;
     }
@@ -52,6 +61,12 @@ let displayMap = {
     "4": "Diamond"
 }
 
+/**
+ * Fills the target container from parsing the text string
+ * @param {string} text 
+ * @param {Container} cont 
+ * @param {TextureCache} id 
+ */
 function fillTargets(text, cont, id) {
     let blocks = text.split('\n');
     let bat = "";

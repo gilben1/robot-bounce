@@ -82,6 +82,11 @@ function inBounds(pos) {
     return true;
 }
 
+/**
+ * Returns an array of entities found within the passed Array at the passed coordinate point
+ * @param {Object} entities 
+ * @param {Object} pos - x/y coordinate object
+ */
 function getEntitiesAt(entities, pos) {
     let ret = {};
     let index = 0;
@@ -100,6 +105,14 @@ function getEntitiesAt(entities, pos) {
     }
 }
 
+/**
+ * Generic function to load entities from a file
+ * func is the function process the file with
+ * @param {function} func 
+ * @param {string} file 
+ * @param {Container} cont 
+ * @param {TextureCache} id 
+ */
 function loadEntities(func, file, cont, id) {
     fetch(file)
         .then((response) => response.text())
