@@ -148,6 +148,7 @@ function robotRewind() {
     for (r in robots) {
         robots[r].rewind();
     }
+    scoreBoard.reset()
 }
 
 /**
