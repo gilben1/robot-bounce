@@ -13,7 +13,6 @@ let Application = PIXI.Application,
 let id;
 let activeText;
 
-let moveCount = 0;
 let moveText;
 
 // Collections
@@ -23,7 +22,6 @@ let menu, move, rewind, robotCont, targetCont, wallCont, tileCont;
 
 // Scoreboard for tracking
 let scoreBoard;
-
 
 let state;
 
@@ -44,9 +42,7 @@ let app = new Application({
 window.onload = function(){
     console.log("Appending app.view to document body...")
     document.body.appendChild(app.view);
-    scoreBoard = new Score();
 };
-
 
 loader
     .add("img/spritesheet.json")
@@ -68,30 +64,28 @@ function setup() {
 
     id = resources["img/spritesheet.json"].textures;
     renderTiles(tileCont, id);
+
+    // Load up the targets
     loadEntities(fillTargets, 'data/targets.txt', targetCont, id);
+
+    // Load up the walls
     loadEntities(fillWalls, 'data/grid.txt', wallCont, id);
 
-    robots['red'] = new Robot(robotCont, id["robot_red.png"], "red Robot", "Red Robot", 2 * 32, 14 * 32);
+    activeRobot = robots['red'] = new Robot(robotCont, id["robot_red.png"], "red Robot", "Red Robot", 2 * 32, 14 * 32);
     robots['blue'] = new Robot(robotCont, id["robot_blue.png"], "blue Robot", "Blue Robot", 13 * 32, 1 * 32);
     robots['green'] = new Robot(robotCont, id["robot_green.png"], "green Robot", "Green Robot", 11 * 32, 13 * 32);
     robots['yellow'] = new Robot(robotCont, id["robot_yellow.png"], "yellow Robot", "Yellow Robot", 3 * 32, 1 * 32);
-    
 
     activeText = new Text("None");
     activeText.position.set(32, 512);
 
-    moveText = new Text("Moves: " + moveCount);
-    moveText.position.set(256, 512);
+    scoreBoard = new Score(256, 512, move);
 
     move.addChild(activeText);
-    move.addChild(moveText);
     move.addChild(tileCont);
     move.addChild(targetCont);
     move.addChild(robotCont);
     move.addChild(wallCont);
-
-
-    activeTarget = targets[-1]
 
     app.stage.addChild(move);
 
@@ -102,13 +96,15 @@ function setup() {
 
 function gameloop(delta) {
     if (state === move) {
-        moveText.text = "Moves: " + scoreBoard.activeScore;
-        if (activeTarget === targets[-1]) {
-            activeTarget = targets[randomInt(0, 17)]
-        }
+        //moveText.text = "Moves: " + scoreBoard.activeScore;
+        scoreBoard.updateMoveText();
+
+        // If the target has been set and there's an active robot, start processing things
         if (activeTarget !== undefined && activeRobot !== undefined) {
             activeText.text = activeRobot.displayName;
             activeTarget.showMirror()
+            
+            // Getting the correct target
             if (activeRobot.atCorrectTarget(activeTarget)) {
                 scoreBoard.addScore(activeRobot, activeTarget);
                 scoreBoard.reset();

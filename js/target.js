@@ -1,8 +1,5 @@
 console.log("Loaded target.js")
 
-/**
- * Global variables pertaining to targets
- */
 let activeTarget;
 
 class Target extends Entity{
@@ -92,6 +89,7 @@ function fillTargets(text, cont, id) {
         ht++;
     }
     console.log(bat);
+    activeTarget = targets[randomInt(0, 17)];
 }
 
 /**
@@ -100,11 +98,13 @@ function fillTargets(text, cont, id) {
  * @param {Target} targets 
  */
 function newTarget(activeTarget, targets) {
-    // Remove the active target from the viable list of targets
-    activeTarget.hideMirror()
+    if (activeTarget !== undefined) {
+        // Remove the active target from the viable list of targets
+        activeTarget.hideMirror()
 
-    let targetKey = Object.keys(targets).find(key => targets[key] === activeTarget);
-    delete targets[targetKey];
+        let targetKey = Object.keys(targets).find(key => targets[key] === activeTarget);
+        delete targets[targetKey];
+    }
 
     activeTarget = targets[randomInt(0, Object.keys(targets).length)]
 

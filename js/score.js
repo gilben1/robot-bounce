@@ -3,11 +3,16 @@ class Score {
     boardIndex = 0
     list
     activeScore = 0
+    text
 
-    constructor() {
+    constructor(x, y, container) {
         this.list = document.createElement("ol");
         document.body.appendChild(this.list)
         this.board = []
+
+        this.text = new Text("Moves: 0");
+        this.text.position.set(x, y);
+        container.addChild(this.text);
     }
 
     /**
@@ -52,4 +57,11 @@ class Score {
         });
     }
 
+    /** 
+     * Sets the move text to the specified string value
+    */
+    updateMoveText()
+    {
+        this.text.text = "Moves: " + this.activeScore;
+    }
 }
