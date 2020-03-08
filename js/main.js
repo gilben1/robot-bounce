@@ -19,7 +19,7 @@ if(!PIXI.utils.isWebGLSupported()){
 PIXI.utils.sayHello(type)
 
 //Create a Pixi Application
-let app = new Application({ // to director
+let app = new Application({ 
     width: 512, 
     height: 544,
     transparent: true

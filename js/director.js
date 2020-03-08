@@ -23,9 +23,14 @@ class Director {
     targetCont
     wallCont
     tileCont
+
     // pixi
     app
     id
+    
+    // html elements
+    rewindButton
+    continueButton
 
     constructor(app, resources) {
         this.app = app;
@@ -56,7 +61,25 @@ class Director {
         this.app.stage.addChild(this.move);
         this.state = this.move;
 
+        this.rewindButton = this.setupButton(this.rewindButton, "Rewind", () => {
+            this.scoreBoard.reset();
+            this.handleRobotRewind();
+            this.state = this.move;
+        });
+        this.continueButton = this.setupButton(this.continueButton, "Continue", () => {
+            this.activeTarget = this.newTarget(this.activeTarget, this.targets);
+            this.scoreBoard.reset();
+            this.state = this.move;
+        });
     }
+
+
+
+    /*
+    ======================
+    | GAMELOOP FUNCTIONS |
+    ======================
+    */
 
     /**
      * Initializes the gameloop
@@ -70,28 +93,38 @@ class Director {
      * @param {*} delta 
      */
     gameloop(delta) {
-        if (this.state === this.move) {
-            this.scoreBoard.updateMoveText();
+        switch(this.state) {
+            case this.move:
+                this.hideButton(this.continueButton);
+                this.hideButton(this.rewindButton);
+                this.scoreBoard.updateMoveText();
 
-            if (this.activeTarget === undefined) {
-                this.activeTarget = this.targets[randomInt(0, 17)];
-            }
-
-            // If the target has been set and there's an active robot, start processing things
-            if (this.activeTarget !== undefined && this.activeRobot !== undefined) {
-                this.activeText.text = this.activeRobot.displayName;
-                this.activeTarget.showMirror()
-                
-                // Getting the correct target
-                if (this.activeRobot.atCorrectTarget(this.activeTarget)) {
-                    this.scoreBoard.addScore(this.activeRobot, this.activeTarget);
-                    this.scoreBoard.reset();
-
-                    this.activeTarget = this.newTarget(this.activeTarget, this.targets);
-
-                    console.log("gottem");
+                if (this.activeTarget === undefined) {
+                    this.activeTarget = this.targets[randomInt(0, 17)];
                 }
-            }
+
+                // If the target has been set and there's an active robot, start processing things
+                if (this.activeTarget !== undefined && this.activeRobot !== undefined) {
+                    this.activeText.text = this.activeRobot.displayName;
+                    this.activeTarget.showMirror()
+                    
+                    // Getting the correct target
+                    if (this.activeRobot.atCorrectTarget(this.activeTarget)) {
+                        this.scoreBoard.addScore(this.activeRobot, this.activeTarget);
+                        // save the new checkpoints
+                        this.updateRobotCheckpoints();
+                        this.state = "rewind"
+                        //this.activeTarget = this.newTarget(this.activeTarget, this.targets);
+                        //this.scoreBoard.reset();
+                    }
+                }
+                break;
+            case "rewind":
+                this.showButton(this.rewindButton);
+                this.showButton(this.continueButton);
+                break;
+            default:
+                console.log("error");
         }
     }
 
@@ -123,6 +156,12 @@ class Director {
             .then((response) => response.text())
             .then((text) => func(text, cont, this.id, coll));
     }
+
+    /*
+    ===================
+    | ROBOT FUNCTIONS |
+    ===================
+    */
 
     /**
      * Handle active robot movement in direction dir
@@ -169,7 +208,7 @@ class Director {
      * Updates all of the checkpoints of the robots
      */
     updateRobotCheckpoints() {
-        for (r in this.robots) {
+        for (let r in this.robots) {
             this.robots[r].updateCheckpoint()
         }
     }
@@ -178,11 +217,17 @@ class Director {
      * Handles rewinding all robots back to their checkpoints
      */
     handleRobotRewind() {
-        for (r in this.robots) {
+        for (let r in this.robots) {
             this.robots[r].rewind();
         }
         this.scoreBoard.reset()
     }
+
+    /*
+    ====================
+    | TARGET FUNCTIONS |
+    ====================
+    */
 
     /**
      * Removes the active target from the pool of targets, and selects a new target
@@ -200,5 +245,38 @@ class Director {
 
         this.activeTarget.showMirror()
     }
+
+
+    /*
+    ================
+    | UI FUNCTIONS |
+    ================
+    */
+
+    /**
+     * Sets up a button with specified text and onclick function
+     * @param {button} buttonName 
+     * @param {String} buttonText 
+     * @param {function} func - onclick function to execute
+     */
+    setupButton(buttonName, buttonText, func) {
+        buttonName = document.createElement("button");
+        buttonName.innerHTML = buttonText;
+        this.hideButton(buttonName);
+        buttonName.onclick = func;
+
+        document.body.appendChild(buttonName);
+
+        return buttonName;
+    }
+
+    hideButton(buttonName) {
+        buttonName.style.display = "none";
+    }
+
+    showButton(buttonName) {
+        buttonName.style.display = "inline-block"
+    }
+
 
 }
