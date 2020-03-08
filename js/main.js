@@ -46,6 +46,9 @@ loader
 
         // Load up the walls
         director.loadEntities(fillWalls, 'data/grid.txt', director.wallCont, director.walls);
+
+        // Start the gameloop
+        director.initGame();
     });
 
 /**

@@ -88,25 +88,4 @@ function fillTargets(text, cont, id, targets) {
         ht++;
     }
     console.log(bat);
-    //activeTarget = targets[randomInt(0, 17)];
-}
-
-/**
- * Swaps out for a new target, removing the old target from the list
- * @param {Target} activeTarget 
- * @param {Target} targets 
- */
-function newTarget(activeTarget, targets) {
-    if (activeTarget !== undefined) {
-        // Remove the active target from the viable list of targets
-        activeTarget.hideMirror()
-
-        let targetKey = Object.keys(targets).find(key => targets[key] === activeTarget);
-        delete targets[targetKey];
-    }
-
-    activeTarget = targets[randomInt(0, Object.keys(targets).length)]
-
-    activeTarget.showMirror()
-    return activeTarget;
 }

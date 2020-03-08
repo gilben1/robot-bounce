@@ -56,6 +56,12 @@ class Director {
         this.app.stage.addChild(this.move);
         this.state = this.move;
 
+    }
+
+    /**
+     * Initializes the gameloop
+     */
+    initGame() {
         this.app.ticker.add(delta => this.gameloop(delta));
     }
 
@@ -81,9 +87,9 @@ class Director {
                     this.scoreBoard.addScore(this.activeRobot, this.activeTarget);
                     this.scoreBoard.reset();
 
-                    this.activeTarget = newTarget(this.activeTarget, this.targets);
+                    this.activeTarget = this.newTarget(this.activeTarget, this.targets);
 
-                    console.log("gotten");
+                    console.log("gottem");
                 }
             }
         }
@@ -168,10 +174,31 @@ class Director {
         }
     }
 
+    /**
+     * Handles rewinding all robots back to their checkpoints
+     */
     handleRobotRewind() {
         for (r in this.robots) {
             this.robots[r].rewind();
         }
         this.scoreBoard.reset()
     }
+
+    /**
+     * Removes the active target from the pool of targets, and selects a new target
+     */
+    newTarget() {
+        if (this.activeTarget !== undefined) {
+            // Remove the active target from the viable list of targets
+            this.activeTarget.hideMirror()
+
+            let targetKey = Object.keys(this.targets).find(key => this.targets[key] === this.activeTarget);
+            delete this.targets[targetKey];
+        }
+
+        this.activeTarget = this.targets[randomInt(0, Object.keys(this.targets).length)]
+
+        this.activeTarget.showMirror()
+    }
+
 }

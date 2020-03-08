@@ -1,9 +1,5 @@
 console.log("Loaded robot.js")
 
-/**
- * Global variables pertaining to Robots
- */
-
 class Robot extends Entity {
     checkpoint
     constructor(container, sprite, name, displayName, x, y) {
