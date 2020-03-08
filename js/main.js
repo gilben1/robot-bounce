@@ -45,24 +45,20 @@ window.onload = function(){
 
 loader
     .add("img/spritesheet.json")
-    .on("progress", loadProgressHandler)
-    .load(setup);
+    .on("progress", (loader, resource) => {
+        console.log("loading: " + resource.url);
+        console.log("progress: " + loader.progress + "%");
+    })
+    .load(() => {
+        director = new Director(app, resources);
+        director.renderTiles();
 
-function loadProgressHandler(loader, resource){
-    console.log("loading: " + resource.url);
-    console.log("progress: " + loader.progress + "%");
-}
+        // Load up the targets
+        director.loadEntities(fillTargets, 'data/targets.txt', director.targetCont, director.targets);
 
-function setup() {
-    director = new Director(app, resources);
-    director.renderTiles();
-
-    // Load up the targets
-    director.loadEntities(fillTargets, 'data/targets.txt', director.targetCont, director.targets);
-
-    // Load up the walls
-    director.loadEntities(fillWalls, 'data/grid.txt', director.wallCont, director.walls);
-}
+        // Load up the walls
+        director.loadEntities(fillWalls, 'data/grid.txt', director.wallCont, director.walls);
+    });
 
 /**
  * Generates a random number between min and max
