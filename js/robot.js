@@ -8,10 +8,10 @@ class Robot extends Entity {
     checkpoint
     constructor(container, sprite, name, displayName, x, y) {
         // store self to pass onto click events to refer to this object
-        let self = super(container, sprite, name, displayName, x, y); 
-        this.sprite.on('mousedown', function(e) {
-            robotSelect(e, self);
-        });
+        super(container, sprite, name, displayName, x, y); 
+        this.sprite.on('mousedown', (e) => {
+            director.activeRobot = this;
+        })
         this.sprite.interactive = true;
         this.checkpoint = {
             x: x,
@@ -110,15 +110,6 @@ class Robot extends Entity {
             y: this.getPos.y
         }
     }
-}
-
-/**
- * Assigns the robot that triggers this callback as the active robot
- * @param {event} eventData 
- * @param {Robot} self 
- */
-function robotSelect(eventData, self, activeRobot) {
-    director.activeRobot = self;
 }
 
 /**

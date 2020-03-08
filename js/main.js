@@ -12,18 +12,6 @@ let Application = PIXI.Application,
 
 let director; // director object
 
-let id; // to director
-let activeText; // to director
-
-// Collections
-let robots = {}, targets = {}, walls = {}; // to director
-// Containers
-let menu, move, rewind, robotCont, targetCont, wallCont, tileCont; // to director
-
-// Scoreboard for tracking
-let scoreBoard; // to director
-let state; // to director
-
 let type = "WebGL"
 if(!PIXI.utils.isWebGLSupported()){
     type = "canvas"
@@ -38,7 +26,7 @@ let app = new Application({ // to director
 });
 
 // Add the application view to the html after the window has loaded
-window.onload = function(){
+window.onload = () => {
     console.log("Appending app.view to document body...")
     document.body.appendChild(app.view);
 };
