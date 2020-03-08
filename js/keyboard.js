@@ -56,18 +56,18 @@ let rightKey = keyboard("ArrowRight");
 let tabKey = keyboard("Tab");
 
 upKey.press = ()  => {
-    director.handleMove('n');
+    director.handleRobotMove('n');
 };
 downKey.press = ()  => {
-    director.handleMove('s');
+    director.handleRobotMove('s');
 };
 leftKey.press = ()  => {
-    director.handleMove('w');
+    director.handleRobotMove('w');
 };
 rightKey.press = ()  => {
-    director.handleMove('e');
+    director.handleRobotMove('e');
 };
 
 tabKey.press = () => {
-  director.robotSwap();
+  director.cycleRobots();
 }

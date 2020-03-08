@@ -59,6 +59,10 @@ class Director {
         this.app.ticker.add(delta => this.gameloop(delta));
     }
 
+    /**
+     * Main gameloop
+     * @param {*} delta 
+     */
     gameloop(delta) {
         if (this.state === this.move) {
             this.scoreBoard.updateMoveText();
@@ -84,6 +88,7 @@ class Director {
             }
         }
     }
+
     /**
      * Renders a 16 x 16 grid of tiles
      */
@@ -114,16 +119,29 @@ class Director {
     }
 
     /**
-     * Handle movement in direction dir
+     * Handle active robot movement in direction dir
      * @param {Char} dir 
      */
-    handleMove(dir) {
+    handleRobotMove(dir) {
         if (this.state === this.move) {
-            robotMove(dir, this.activeRobot, this.scoreBoard, this.walls, this.robots);
+            if (this.activeRobot !== undefined) {
+                let moves = 0;
+                while(this.activeRobot.move(dir, this.robots, this.walls)) { moves++; }
+                // If the loop actually moved the robot, add to the move count
+                if (moves !== 0) {
+                    this.scoreBoard.add();
+                }
+            }
+            else {
+                console.log("can't move " + dir + " no active robot selected");
+            }
         }
     }
 
-    robotSwap() {
+    /**
+     * Cycles through the robots based on the current active robot
+     */
+    cycleRobots() {
         switch(this.activeRobot) {
             case this.robots['red']:
             this.activeRobot = this.robots['blue'];
@@ -139,5 +157,21 @@ class Director {
             this.activeRobot = this.robots['red'];
             break;
         }
+    }
+
+    /**
+     * Updates all of the checkpoints of the robots
+     */
+    updateRobotCheckpoints() {
+        for (r in this.robots) {
+            this.robots[r].updateCheckpoint()
+        }
+    }
+
+    handleRobotRewind() {
+        for (r in this.robots) {
+            this.robots[r].rewind();
+        }
+        this.scoreBoard.reset()
     }
 }

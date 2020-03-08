@@ -24,6 +24,7 @@ class Robot extends Entity {
      * @param {string} dir - n e w s
      */
     move(dir, robots, walls) {
+        // Get the positions in each cardinal directions
         let north = {x: this.sprite.x, y: this.sprite.y - 32};
         let south = {x: this.sprite.x, y: this.sprite.y + 32};
         let east = {x: this.sprite.x + 32, y: this.sprite.y};
@@ -109,42 +110,5 @@ class Robot extends Entity {
             x: this.getPos.x,
             y: this.getPos.y
         }
-    }
-}
-
-/**
- * Move to the passed direction until a wall or other obstacle is hit
- * @param {string} dir 
- */
-function robotMove(dir, activeRobot, scoreBoard, walls, robots) {
-    if (activeRobot !== undefined) {
-        let moves = 0;
-        while(activeRobot.move(dir, robots, walls)) { moves++; }
-        // If the loop actually moved the robot, add to the move count
-        if (moves !== 0) {
-            scoreBoard.add();
-        }
-    }
-    else {
-        console.log("can't move " + dir + " no active robot selected");
-    }
-}
-
-/**
- * Rewinds all robots to their last checkpoint
- */
-function robotRewind() {
-    for (r in robots) {
-        robots[r].rewind();
-    }
-    scoreBoard.reset()
-}
-
-/**
- * Updates the checkpoints for all robots
- */
-function robotUpdateCheckpoint() {
-    for (r in robots) {
-        robots[r].updateCheckpoint()
     }
 }
