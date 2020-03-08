@@ -1,18 +1,13 @@
 console.log("Loaded robot.js")
 
-/**
- * Global variables pertaining to Robots
- */
-let activeRobot;
-
 class Robot extends Entity {
     checkpoint
     constructor(container, sprite, name, displayName, x, y) {
         // store self to pass onto click events to refer to this object
-        let self = super(container, sprite, name, displayName, x, y); 
-        this.sprite.on('mousedown', function(e) {
-            robotSelect(e, self);
-        });
+        super(container, sprite, name, displayName, x, y); 
+        this.sprite.on('mousedown', (e) => {
+            director.activeRobot = this;
+        })
         this.sprite.interactive = true;
         this.checkpoint = {
             x: x,
@@ -24,7 +19,8 @@ class Robot extends Entity {
      * Moves robot in direction dir by 32 pixels, to conform to the grid
      * @param {string} dir - n e w s
      */
-    move(dir) {
+    move(dir, robots, walls) {
+        // Get the positions in each cardinal directions
         let north = {x: this.sprite.x, y: this.sprite.y - 32};
         let south = {x: this.sprite.x, y: this.sprite.y + 32};
         let east = {x: this.sprite.x + 32, y: this.sprite.y};
@@ -110,52 +106,5 @@ class Robot extends Entity {
             x: this.getPos.x,
             y: this.getPos.y
         }
-    }
-}
-
-
-/**
- * Assigns the robot that triggers this callback as the active robot
- * @param {event} eventData 
- * @param {Robot} self 
- */
-function robotSelect(eventData, self) {
-    activeRobot = self;
-}
-
-/**
- * Move to the passed direction until a wall or other obstacle is hit
- * @param {string} dir 
- */
-function robotMove(dir) {
-    if (activeRobot !== undefined) {
-        let moves = 0;
-        while(activeRobot.move(dir)) { moves++; }
-        // If the loop actually moved the robot, add to the move count
-        if (moves !== 0) {
-            scoreBoard.add();
-        }
-    }
-    else {
-        console.log("can't move " + dir + " no active robot selected");
-    }
-}
-
-/**
- * Rewinds all robots to their last checkpoint
- */
-function robotRewind() {
-    for (r in robots) {
-        robots[r].rewind();
-    }
-    scoreBoard.reset()
-}
-
-/**
- * Updates the checkpoints for all robots
- */
-function robotUpdateCheckpoint() {
-    for (r in robots) {
-        robots[r].updateCheckpoint()
     }
 }

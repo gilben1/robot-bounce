@@ -56,40 +56,18 @@ let rightKey = keyboard("ArrowRight");
 let tabKey = keyboard("Tab");
 
 upKey.press = ()  => {
-    if (state === move) {
-      robotMove('n');
-    }
+    director.handleRobotMove('n');
 };
 downKey.press = ()  => {
-    if (state === move) {
-      robotMove('s');
-    }
+    director.handleRobotMove('s');
 };
 leftKey.press = ()  => {
-    if (state === move) {
-      robotMove('w');
-    }
+    director.handleRobotMove('w');
 };
 rightKey.press = ()  => {
-    if (state === move) {
-      robotMove('e');
-    }
+    director.handleRobotMove('e');
 };
 
 tabKey.press = () => {
-  switch(activeRobot) {
-    case robots['red']:
-      activeRobot = robots['blue'];
-      break;
-    case robots['blue']:
-      activeRobot = robots['green'];
-      break;
-    case robots['green']:
-      activeRobot = robots['yellow'];
-      break;
-    case undefined:
-    case robots['yellow']:
-      activeRobot = robots['red'];
-      break;
-  }
+  director.cycleRobots();
 }

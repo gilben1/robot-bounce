@@ -10,22 +10,7 @@ let Application = PIXI.Application,
     Text = PIXI.Text,
     Container = PIXI.Container;
 
-let id;
-let activeText;
-
-let moveCount = 0;
-let moveText;
-
-// Collections
-let robots = {}, targets = {}, walls = {};
-// Containers
-let menu, move, rewind, robotCont, targetCont, wallCont, tileCont;
-
-// Scoreboard for tracking
-let scoreBoard;
-
-
-let state;
+let director; // director object
 
 let type = "WebGL"
 if(!PIXI.utils.isWebGLSupported()){
@@ -34,92 +19,37 @@ if(!PIXI.utils.isWebGLSupported()){
 PIXI.utils.sayHello(type)
 
 //Create a Pixi Application
-let app = new Application({
+let app = new Application({ // to director
     width: 512, 
     height: 544,
     transparent: true
 });
 
 // Add the application view to the html after the window has loaded
-window.onload = function(){
+window.onload = () => {
     console.log("Appending app.view to document body...")
     document.body.appendChild(app.view);
-    scoreBoard = new Score();
 };
-
 
 loader
     .add("img/spritesheet.json")
-    .on("progress", loadProgressHandler)
-    .load(setup);
+    .on("progress", (loader, resource) => {
+        console.log("loading: " + resource.url);
+        console.log("progress: " + loader.progress + "%");
+    })
+    .load(() => {
+        director = new Director(app, resources);
+        director.renderTiles();
 
-function loadProgressHandler(loader, resource){
-    console.log("loading: " + resource.url);
-    console.log("progress: " + loader.progress + "%");
-}
+        // Load up the targets
+        director.loadEntities(fillTargets, 'data/targets.txt', director.targetCont, director.targets);
 
-function setup() {
+        // Load up the walls
+        director.loadEntities(fillWalls, 'data/grid.txt', director.wallCont, director.walls);
 
-    move = new Container();
-    robotCont = new Container();
-    targetCont = new Container();
-    wallCont = new Container();
-    tileCont = new Container();
-
-    id = resources["img/spritesheet.json"].textures;
-    renderTiles(tileCont, id);
-    loadEntities(fillTargets, 'data/targets.txt', targetCont, id);
-    loadEntities(fillWalls, 'data/grid.txt', wallCont, id);
-
-    robots['red'] = new Robot(robotCont, id["robot_red.png"], "red Robot", "Red Robot", 2 * 32, 14 * 32);
-    robots['blue'] = new Robot(robotCont, id["robot_blue.png"], "blue Robot", "Blue Robot", 13 * 32, 1 * 32);
-    robots['green'] = new Robot(robotCont, id["robot_green.png"], "green Robot", "Green Robot", 11 * 32, 13 * 32);
-    robots['yellow'] = new Robot(robotCont, id["robot_yellow.png"], "yellow Robot", "Yellow Robot", 3 * 32, 1 * 32);
-    
-
-    activeText = new Text("None");
-    activeText.position.set(32, 512);
-
-    moveText = new Text("Moves: " + moveCount);
-    moveText.position.set(256, 512);
-
-    move.addChild(activeText);
-    move.addChild(moveText);
-    move.addChild(tileCont);
-    move.addChild(targetCont);
-    move.addChild(robotCont);
-    move.addChild(wallCont);
-
-
-    activeTarget = targets[-1]
-
-    app.stage.addChild(move);
-
-    state = move;
-
-    app.ticker.add(delta => gameloop(delta));
-}
-
-function gameloop(delta) {
-    if (state === move) {
-        moveText.text = "Moves: " + scoreBoard.activeScore;
-        if (activeTarget === targets[-1]) {
-            activeTarget = targets[randomInt(0, 17)]
-        }
-        if (activeTarget !== undefined && activeRobot !== undefined) {
-            activeText.text = activeRobot.displayName;
-            activeTarget.showMirror()
-            if (activeRobot.atCorrectTarget(activeTarget)) {
-                scoreBoard.addScore(activeRobot, activeTarget);
-                scoreBoard.reset();
-
-                activeTarget = newTarget(activeTarget, targets);
-
-                console.log("gotten");
-            }
-        }
-    }
-}
+        // Start the gameloop
+        director.initGame();
+    });
 
 /**
  * Generates a random number between min and max
@@ -129,21 +59,4 @@ function gameloop(delta) {
 function randomInt(min, max) {
     console.log(min + " " + max)
     return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-/**
- * Renders a 16 x 16 grid of tiles
- * @param {Object} app - PIXI.Application to render onto
- * @param {Object} id - resources cache to load from, usually created by PIXI.loader.resources["path/filename.json"].textures
- */
-function renderTiles(container, id) {
-    let tileTexture = id["tile.png"];
-    for (i = 0; i < 16; i++) {
-        for (j = 0; j < 16; j++) {
-            let tile = new Sprite(tileTexture);
-            tile.x = i * 32;
-            tile.y = j * 32;
-            container.addChild(tile);
-        }
-    }
 }

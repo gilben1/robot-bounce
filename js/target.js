@@ -1,10 +1,5 @@
 console.log("Loaded target.js")
 
-/**
- * Global variables pertaining to targets
- */
-let activeTarget;
-
 class Target extends Entity{
     mirror
     constructor(container, sprite, name, displayName, x, y) {
@@ -65,9 +60,10 @@ let displayMap = {
  * Fills the target container from parsing the text string
  * @param {string} text 
  * @param {Container} cont 
- * @param {TextureCache} id 
+ * @param {TextureCache} id
+ * @param {Array} targets
  */
-function fillTargets(text, cont, id) {
+function fillTargets(text, cont, id, targets) {
     let blocks = text.split('\n');
     let bat = "";
     let index = 0;
@@ -92,22 +88,4 @@ function fillTargets(text, cont, id) {
         ht++;
     }
     console.log(bat);
-}
-
-/**
- * Swaps out for a new target, removing the old target from the list
- * @param {Target} activeTarget 
- * @param {Target} targets 
- */
-function newTarget(activeTarget, targets) {
-    // Remove the active target from the viable list of targets
-    activeTarget.hideMirror()
-
-    let targetKey = Object.keys(targets).find(key => targets[key] === activeTarget);
-    delete targets[targetKey];
-
-    activeTarget = targets[randomInt(0, Object.keys(targets).length)]
-
-    activeTarget.showMirror()
-    return activeTarget;
 }
