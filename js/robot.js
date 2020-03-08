@@ -7,6 +7,7 @@ class Robot extends Entity {
         super(container, sprite, name, displayName, x, y); 
         this.sprite.on('mousedown', (e) => {
             director.activeRobot = this;
+            director.renderMarker();
         })
         this.sprite.interactive = true;
         this.checkpoint = {

@@ -8,7 +8,8 @@ let Application = PIXI.Application,
     Rectangle = PIXI.Rectangle,
     TextureCache = PIXI.utils.TextureCache,
     Text = PIXI.Text,
-    Container = PIXI.Container;
+    Container = PIXI.Container,
+    Graphics = PIXI.Graphics;
 
 let director; // director object
 

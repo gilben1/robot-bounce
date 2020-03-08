@@ -8,6 +8,7 @@ class Director {
     // collections
     robots = {}
     targets = {}
+    usedTargets = {}
     walls = {}
 
     // active things
@@ -27,6 +28,9 @@ class Director {
     // pixi
     app
     id
+
+    // Sprite elements
+    activeMarker
     
     // html elements
     rewindButton
@@ -47,6 +51,9 @@ class Director {
         this.robots['green'] = new Robot(this.robotCont, this.id["robot_green.png"], "green Robot", "Green Robot", 11 * 32, 13 * 32);
         this.robots['yellow'] = new Robot(this.robotCont, this.id["robot_yellow.png"], "yellow Robot", "Yellow Robot", 3 * 32, 1 * 32);
 
+        this.activeMarker = new Graphics();
+        this.renderMarker();
+
         this.activeText = new Text("None");
         this.activeText.position.set(32, 512);
         
@@ -57,17 +64,19 @@ class Director {
         this.move.addChild(this.targetCont);
         this.move.addChild(this.robotCont);
         this.move.addChild(this.wallCont);
+        this.move.addChild(this.activeMarker);
 
         this.app.stage.addChild(this.move);
         this.state = this.move;
 
-        this.rewindButton = this.setupButton(this.rewindButton, "Rewind", () => {
+        this.rewindButton = this.setupButton(this.rewindButton, "Rewind", () => { // Rewind functionality
             this.scoreBoard.reset();
             this.handleRobotRewind();
             this.state = this.move;
         });
-        this.continueButton = this.setupButton(this.continueButton, "Continue", () => {
-            this.activeTarget = this.newTarget(this.activeTarget, this.targets);
+        this.continueButton = this.setupButton(this.continueButton, "Continue", () => { // continue functionality
+            this.newTarget();
+            this.updateRobotCheckpoints();
             this.scoreBoard.reset();
             this.state = this.move;
         });
@@ -111,11 +120,7 @@ class Director {
                     // Getting the correct target
                     if (this.activeRobot.atCorrectTarget(this.activeTarget)) {
                         this.scoreBoard.addScore(this.activeRobot, this.activeTarget);
-                        // save the new checkpoints
-                        this.updateRobotCheckpoints();
                         this.state = "rewind"
-                        //this.activeTarget = this.newTarget(this.activeTarget, this.targets);
-                        //this.scoreBoard.reset();
                     }
                 }
                 break;
@@ -175,6 +180,7 @@ class Director {
                 // If the loop actually moved the robot, add to the move count
                 if (moves !== 0) {
                     this.scoreBoard.add();
+                    this.renderMarker();
                 }
             }
             else {
@@ -202,6 +208,7 @@ class Director {
             this.activeRobot = this.robots['red'];
             break;
         }
+        this.renderMarker();
     }
 
     /**
@@ -221,6 +228,7 @@ class Director {
             this.robots[r].rewind();
         }
         this.scoreBoard.reset()
+        this.renderMarker();
     }
 
     /*
@@ -239,6 +247,8 @@ class Director {
 
             let targetKey = Object.keys(this.targets).find(key => this.targets[key] === this.activeTarget);
             delete this.targets[targetKey];
+            // move to the used pool
+            this.usedTargets[targetKey] = this.activeTarget;
         }
 
         this.activeTarget = this.targets[randomInt(0, Object.keys(this.targets).length)]
@@ -270,13 +280,41 @@ class Director {
         return buttonName;
     }
 
+    /**
+     * Hide named button
+     * @param {String} buttonName 
+     */
     hideButton(buttonName) {
         buttonName.style.display = "none";
     }
 
+    /**
+     * Show named button
+     * @param {String} buttonName 
+     */
     showButton(buttonName) {
         buttonName.style.display = "inline-block"
     }
 
+    /**
+     * Re-draw the marker about the active robot
+     */
+    renderMarker() {
+        this.activeMarker.clear();
+
+        let robX = this.activeRobot.getPos.x;
+        let robY = this.activeRobot.getPos.y;
+    
+        let points = [
+            robX + 4, robY - 16,
+            robX + 16, robY - 4,
+            robX + 28, robY - 16
+        ]
+
+        this.activeMarker.lineStyle(4, 0xFF3300, 1);
+
+        //this.activeMarker.drawRect(this.activeRobot.getPos.x, this.activeRobot.getPos.y, 32, 32);
+        this.activeMarker.drawPolygon(points);
+    }
 
 }
