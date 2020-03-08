@@ -11,7 +11,7 @@ let Application = PIXI.Application,
     Container = PIXI.Container,
     Graphics = PIXI.Graphics;
 
-let director; // director object
+let director; // director object;
 
 let type = "WebGL"
 if(!PIXI.utils.isWebGLSupported()){
@@ -22,7 +22,7 @@ PIXI.utils.sayHello(type)
 //Create a Pixi Application
 let app = new Application({ 
     width: 512, 
-    height: 544,
+    height: 576,
     transparent: true
 });
 

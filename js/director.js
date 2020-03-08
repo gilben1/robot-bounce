@@ -25,6 +25,14 @@ class Director {
     wallCont
     tileCont
 
+    // settings
+    board = {
+        x: 0,
+        width: 0,
+        y: 0,
+        height: 0
+    }
+
     // pixi
     app
     id
@@ -39,6 +47,12 @@ class Director {
     constructor(app, resources) {
         this.app = app;
 
+        this.board.x = 0;
+        this.board.y = 32;
+
+        this.board.width = app.view.width - 32;
+        this.board.height = app.view.height - 64;
+
         this.move = new Container();
         this.robotCont = new Container();
         this.targetCont = new Container();
@@ -46,18 +60,18 @@ class Director {
         this.tileCont = new Container();
         this.id = resources["img/spritesheet.json"].textures;
 
-        this.activeRobot = this.robots['red'] = new Robot(this.robotCont, this.id["robot_red.png"], "red Robot", "Red Robot", 2 * 32, 14 * 32);
-        this.robots['blue'] = new Robot(this.robotCont, this.id["robot_blue.png"], "blue Robot", "Blue Robot", 13 * 32, 1 * 32);
-        this.robots['green'] = new Robot(this.robotCont, this.id["robot_green.png"], "green Robot", "Green Robot", 11 * 32, 13 * 32);
-        this.robots['yellow'] = new Robot(this.robotCont, this.id["robot_yellow.png"], "yellow Robot", "Yellow Robot", 3 * 32, 1 * 32);
+        this.activeRobot = this.robots['red'] = new Robot(this.robotCont, this.id["robot_red.png"], "red Robot", "Red Robot", 2 * 32 + this.board.x, 14 * 32 + this.board.y);
+        this.robots['blue'] = new Robot(this.robotCont, this.id["robot_blue.png"], "blue Robot", "Blue Robot", 13 * 32 + this.board.x, 1 * 32 + this.board.y);
+        this.robots['green'] = new Robot(this.robotCont, this.id["robot_green.png"], "green Robot", "Green Robot", 11 * 32 + this.board.x, 13 * 32 + this.board.y);
+        this.robots['yellow'] = new Robot(this.robotCont, this.id["robot_yellow.png"], "yellow Robot", "Yellow Robot", 3 * 32 + this.board.x, 1 * 32 + this.board.y);
 
         this.activeMarker = new Graphics();
         this.renderMarker();
 
         this.activeText = new Text("None");
-        this.activeText.position.set(32, 512);
+        this.activeText.position.set(32, this.board.height + 32);
         
-        this.scoreBoard = new Score(256, 512, this.move);
+        this.scoreBoard = new Score(this.board.width / 2, this.board.height + 32, this.move);
 
         this.move.addChild(this.activeText);
         this.move.addChild(this.tileCont);
@@ -133,20 +147,6 @@ class Director {
         }
     }
 
-    /**
-     * Renders a 16 x 16 grid of tiles
-     */
-    renderTiles() {
-        let tileTexture = this.id["tile.png"];
-        for (let i = 0; i < 16; i++) {
-            for (let j = 0; j < 16; j++) {
-                let tile = new Sprite(tileTexture);
-                tile.x = i * 32;
-                tile.y = j * 32;
-                this.tileCont.addChild(tile);
-            }
-        }
-    }
 
     /**
      * Generic function to load entities from a file
@@ -262,6 +262,21 @@ class Director {
     | UI FUNCTIONS |
     ================
     */
+
+    /**
+     * Renders a 16 x 16 grid of tiles
+     */
+    renderTiles() {
+        let tileTexture = this.id["tile.png"];
+        for (let i = 0; i < 16; i++) {
+            for (let j = 0; j < 16; j++) {
+                let tile = new Sprite(tileTexture);
+                tile.x = i * 32 + this.board.x;
+                tile.y = j * 32 + this.board.y;
+                this.tileCont.addChild(tile);
+            }
+        }
+    }
 
     /**
      * Sets up a button with specified text and onclick function

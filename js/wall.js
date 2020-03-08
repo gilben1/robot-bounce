@@ -29,8 +29,8 @@ function fillWalls(text, cont, id, walls) {
         for (i = 0; i < 32; i += 2) {
             let bit = blocks[block].substring(i, i + 2);
             bat += bit;
-            let x = i * 16;
-            let y = ht * 32;
+            let x = i * 16 + director.board.x;
+            let y = ht * 32 + director.board.y;
                 if (bit.includes('n')) {
                     walls[index] = new Wall(cont, id["wall_north.png"], "n", "North", x, y);
                     index++;
