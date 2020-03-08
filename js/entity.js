@@ -104,17 +104,3 @@ function getEntitiesAt(entities, pos) {
         return ret;
     }
 }
-
-/**
- * Generic function to load entities from a file
- * func is the function process the file with
- * @param {function} func 
- * @param {string} file 
- * @param {Container} cont 
- * @param {TextureCache} id 
- */
-function loadEntities(func, file, cont, id) {
-    fetch(file)
-        .then((response) => response.text())
-        .then((text) => func(text, cont, id))
-}

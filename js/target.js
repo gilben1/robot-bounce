@@ -1,7 +1,5 @@
 console.log("Loaded target.js")
 
-let activeTarget;
-
 class Target extends Entity{
     mirror
     constructor(container, sprite, name, displayName, x, y) {
@@ -62,9 +60,10 @@ let displayMap = {
  * Fills the target container from parsing the text string
  * @param {string} text 
  * @param {Container} cont 
- * @param {TextureCache} id 
+ * @param {TextureCache} id
+ * @param {Array} targets
  */
-function fillTargets(text, cont, id) {
+function fillTargets(text, cont, id, targets) {
     let blocks = text.split('\n');
     let bat = "";
     let index = 0;
@@ -89,7 +88,7 @@ function fillTargets(text, cont, id) {
         ht++;
     }
     console.log(bat);
-    activeTarget = targets[randomInt(0, 17)];
+    //activeTarget = targets[randomInt(0, 17)];
 }
 
 /**

@@ -18,8 +18,9 @@ class Wall extends Entity {
  * @param {string} text 
  * @param {Container} cont 
  * @param {TextureCache} id 
+ * @param {array} walls
  */
-function fillWalls(text, cont, id) {
+function fillWalls(text, cont, id, walls) {
     let blocks = text.split('\n');
     let bat = "";
     let index = 0;
