@@ -5,7 +5,7 @@ class Target extends Entity{
     constructor(container, sprite, name, displayName, x, y) {
         super(container, sprite, name, displayName, x, y);
         this.mirror = new Sprite(sprite); // make a copy we can use to show in the center
-        this.mirror.position.set(240, 240);
+        this.mirror.position.set(240 + director.board.x, 240 + director.board.y);
         this.mirror.visible = false;
         container.addChild(this.mirror);
     }
@@ -71,8 +71,8 @@ function fillTargets(text, cont, id, targets) {
     for(block in blocks) {
         for (i = 0; i < 32; i += 2) {
             let bit = blocks[block].substring(i, i + 2);
-            let x = i * 16;
-            let y = ht * 32;
+            let x = i * 16 + director.board.x;
+            let y = ht * 32 + director.board.y;
 
             let fileName = targetMap[bit[1]] + targetMap[bit[0]] + ".png"
             let shortName = targetMap[bit[1]] + bit[0]

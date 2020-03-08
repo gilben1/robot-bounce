@@ -8,9 +8,10 @@ let Application = PIXI.Application,
     Rectangle = PIXI.Rectangle,
     TextureCache = PIXI.utils.TextureCache,
     Text = PIXI.Text,
-    Container = PIXI.Container;
+    Container = PIXI.Container,
+    Graphics = PIXI.Graphics;
 
-let director; // director object
+let director; // director object;
 
 let type = "WebGL"
 if(!PIXI.utils.isWebGLSupported()){
@@ -19,9 +20,9 @@ if(!PIXI.utils.isWebGLSupported()){
 PIXI.utils.sayHello(type)
 
 //Create a Pixi Application
-let app = new Application({ // to director
+let app = new Application({ 
     width: 512, 
-    height: 544,
+    height: 576,
     transparent: true
 });
 

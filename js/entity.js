@@ -75,10 +75,10 @@ function notColliding(entities, pos) {
  * @param {Object} pos  - x/y coordinate object
  */
 function inBounds(pos) {
-    if (pos.x > app.view.width - 32)    {return false}
-    if (pos.x < 0)                      {return false}
-    if (pos.y > app.view.height - 64)   {return false}
-    if (pos.y < 0)                      {return false}
+    if (pos.x > director.board.width)    {return false}
+    if (pos.x < director.board.x)    {return false}
+    if (pos.y > director.board.height)    {return false}
+    if (pos.y < director.board.y)    {return false}
     return true;
 }
 

@@ -8,6 +8,7 @@ class Director {
     // collections
     robots = {}
     targets = {}
+    usedTargets = {}
     walls = {}
 
     // active things
@@ -23,12 +24,34 @@ class Director {
     targetCont
     wallCont
     tileCont
+
+    // settings
+    board = {
+        x: 0,
+        width: 0,
+        y: 0,
+        height: 0
+    }
+
     // pixi
     app
     id
 
+    // Sprite elements
+    activeMarker
+    
+    // html elements
+    rewindButton
+    continueButton
+
     constructor(app, resources) {
         this.app = app;
+
+        this.board.x = 0;
+        this.board.y = 32;
+
+        this.board.width = app.view.width - 32;
+        this.board.height = app.view.height - 64;
 
         this.move = new Container();
         this.robotCont = new Container();
@@ -37,26 +60,49 @@ class Director {
         this.tileCont = new Container();
         this.id = resources["img/spritesheet.json"].textures;
 
-        this.activeRobot = this.robots['red'] = new Robot(this.robotCont, this.id["robot_red.png"], "red Robot", "Red Robot", 2 * 32, 14 * 32);
-        this.robots['blue'] = new Robot(this.robotCont, this.id["robot_blue.png"], "blue Robot", "Blue Robot", 13 * 32, 1 * 32);
-        this.robots['green'] = new Robot(this.robotCont, this.id["robot_green.png"], "green Robot", "Green Robot", 11 * 32, 13 * 32);
-        this.robots['yellow'] = new Robot(this.robotCont, this.id["robot_yellow.png"], "yellow Robot", "Yellow Robot", 3 * 32, 1 * 32);
+        this.activeRobot = this.robots['red'] = new Robot(this.robotCont, this.id["robot_red.png"], "red Robot", "Red Robot", 2 * 32 + this.board.x, 14 * 32 + this.board.y);
+        this.robots['blue'] = new Robot(this.robotCont, this.id["robot_blue.png"], "blue Robot", "Blue Robot", 13 * 32 + this.board.x, 1 * 32 + this.board.y);
+        this.robots['green'] = new Robot(this.robotCont, this.id["robot_green.png"], "green Robot", "Green Robot", 11 * 32 + this.board.x, 13 * 32 + this.board.y);
+        this.robots['yellow'] = new Robot(this.robotCont, this.id["robot_yellow.png"], "yellow Robot", "Yellow Robot", 3 * 32 + this.board.x, 1 * 32 + this.board.y);
+
+        this.activeMarker = new Graphics();
+        this.renderMarker();
 
         this.activeText = new Text("None");
-        this.activeText.position.set(32, 512);
+        this.activeText.position.set(32, this.board.height + 32);
         
-        this.scoreBoard = new Score(256, 512, this.move);
+        this.scoreBoard = new Score(this.board.width / 2, this.board.height + 32, this.move);
 
         this.move.addChild(this.activeText);
         this.move.addChild(this.tileCont);
         this.move.addChild(this.targetCont);
         this.move.addChild(this.robotCont);
         this.move.addChild(this.wallCont);
+        this.move.addChild(this.activeMarker);
 
         this.app.stage.addChild(this.move);
         this.state = this.move;
 
+        this.rewindButton = this.setupButton(this.rewindButton, "Rewind", () => { // Rewind functionality
+            this.scoreBoard.reset();
+            this.handleRobotRewind();
+            this.state = this.move;
+        });
+        this.continueButton = this.setupButton(this.continueButton, "Continue", () => { // continue functionality
+            this.newTarget();
+            this.updateRobotCheckpoints();
+            this.scoreBoard.reset();
+            this.state = this.move;
+        });
     }
+
+
+
+    /*
+    ======================
+    | GAMELOOP FUNCTIONS |
+    ======================
+    */
 
     /**
      * Initializes the gameloop
@@ -70,45 +116,37 @@ class Director {
      * @param {*} delta 
      */
     gameloop(delta) {
-        if (this.state === this.move) {
-            this.scoreBoard.updateMoveText();
+        switch(this.state) {
+            case this.move:
+                this.hideButton(this.continueButton);
+                this.hideButton(this.rewindButton);
+                this.scoreBoard.updateMoveText();
 
-            if (this.activeTarget === undefined) {
-                this.activeTarget = this.targets[randomInt(0, 17)];
-            }
-
-            // If the target has been set and there's an active robot, start processing things
-            if (this.activeTarget !== undefined && this.activeRobot !== undefined) {
-                this.activeText.text = this.activeRobot.displayName;
-                this.activeTarget.showMirror()
-                
-                // Getting the correct target
-                if (this.activeRobot.atCorrectTarget(this.activeTarget)) {
-                    this.scoreBoard.addScore(this.activeRobot, this.activeTarget);
-                    this.scoreBoard.reset();
-
-                    this.activeTarget = this.newTarget(this.activeTarget, this.targets);
-
-                    console.log("gottem");
+                if (this.activeTarget === undefined) {
+                    this.activeTarget = this.targets[randomInt(0, 17)];
                 }
-            }
+
+                // If the target has been set and there's an active robot, start processing things
+                if (this.activeTarget !== undefined && this.activeRobot !== undefined) {
+                    this.activeText.text = this.activeRobot.displayName;
+                    this.activeTarget.showMirror()
+                    
+                    // Getting the correct target
+                    if (this.activeRobot.atCorrectTarget(this.activeTarget)) {
+                        this.scoreBoard.addScore(this.activeRobot, this.activeTarget);
+                        this.state = "rewind"
+                    }
+                }
+                break;
+            case "rewind":
+                this.showButton(this.rewindButton);
+                this.showButton(this.continueButton);
+                break;
+            default:
+                console.log("error");
         }
     }
 
-    /**
-     * Renders a 16 x 16 grid of tiles
-     */
-    renderTiles() {
-        let tileTexture = this.id["tile.png"];
-        for (let i = 0; i < 16; i++) {
-            for (let j = 0; j < 16; j++) {
-                let tile = new Sprite(tileTexture);
-                tile.x = i * 32;
-                tile.y = j * 32;
-                this.tileCont.addChild(tile);
-            }
-        }
-    }
 
     /**
      * Generic function to load entities from a file
@@ -124,6 +162,12 @@ class Director {
             .then((text) => func(text, cont, this.id, coll));
     }
 
+    /*
+    ===================
+    | ROBOT FUNCTIONS |
+    ===================
+    */
+
     /**
      * Handle active robot movement in direction dir
      * @param {Char} dir 
@@ -136,6 +180,7 @@ class Director {
                 // If the loop actually moved the robot, add to the move count
                 if (moves !== 0) {
                     this.scoreBoard.add();
+                    this.renderMarker();
                 }
             }
             else {
@@ -163,13 +208,14 @@ class Director {
             this.activeRobot = this.robots['red'];
             break;
         }
+        this.renderMarker();
     }
 
     /**
      * Updates all of the checkpoints of the robots
      */
     updateRobotCheckpoints() {
-        for (r in this.robots) {
+        for (let r in this.robots) {
             this.robots[r].updateCheckpoint()
         }
     }
@@ -178,11 +224,18 @@ class Director {
      * Handles rewinding all robots back to their checkpoints
      */
     handleRobotRewind() {
-        for (r in this.robots) {
+        for (let r in this.robots) {
             this.robots[r].rewind();
         }
         this.scoreBoard.reset()
+        this.renderMarker();
     }
+
+    /*
+    ====================
+    | TARGET FUNCTIONS |
+    ====================
+    */
 
     /**
      * Removes the active target from the pool of targets, and selects a new target
@@ -194,11 +247,89 @@ class Director {
 
             let targetKey = Object.keys(this.targets).find(key => this.targets[key] === this.activeTarget);
             delete this.targets[targetKey];
+            // move to the used pool
+            this.usedTargets[targetKey] = this.activeTarget;
         }
 
         this.activeTarget = this.targets[randomInt(0, Object.keys(this.targets).length)]
 
         this.activeTarget.showMirror()
+    }
+
+
+    /*
+    ================
+    | UI FUNCTIONS |
+    ================
+    */
+
+    /**
+     * Renders a 16 x 16 grid of tiles
+     */
+    renderTiles() {
+        let tileTexture = this.id["tile.png"];
+        for (let i = 0; i < 16; i++) {
+            for (let j = 0; j < 16; j++) {
+                let tile = new Sprite(tileTexture);
+                tile.x = i * 32 + this.board.x;
+                tile.y = j * 32 + this.board.y;
+                this.tileCont.addChild(tile);
+            }
+        }
+    }
+
+    /**
+     * Sets up a button with specified text and onclick function
+     * @param {button} buttonName 
+     * @param {String} buttonText 
+     * @param {function} func - onclick function to execute
+     */
+    setupButton(buttonName, buttonText, func) {
+        buttonName = document.createElement("button");
+        buttonName.innerHTML = buttonText;
+        this.hideButton(buttonName);
+        buttonName.onclick = func;
+
+        document.body.appendChild(buttonName);
+
+        return buttonName;
+    }
+
+    /**
+     * Hide named button
+     * @param {String} buttonName 
+     */
+    hideButton(buttonName) {
+        buttonName.style.display = "none";
+    }
+
+    /**
+     * Show named button
+     * @param {String} buttonName 
+     */
+    showButton(buttonName) {
+        buttonName.style.display = "inline-block"
+    }
+
+    /**
+     * Re-draw the marker about the active robot
+     */
+    renderMarker() {
+        this.activeMarker.clear();
+
+        let robX = this.activeRobot.getPos.x;
+        let robY = this.activeRobot.getPos.y;
+    
+        let points = [
+            robX + 4, robY - 16,
+            robX + 16, robY - 4,
+            robX + 28, robY - 16
+        ]
+
+        this.activeMarker.lineStyle(4, 0xFF3300, 1);
+
+        //this.activeMarker.drawRect(this.activeRobot.getPos.x, this.activeRobot.getPos.y, 32, 32);
+        this.activeMarker.drawPolygon(points);
     }
 
 }
