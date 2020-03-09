@@ -109,3 +109,44 @@ class Robot extends Entity {
         }
     }
 }
+
+
+let robotMap = {
+    "r": "Red",
+    "b": "Blue",
+    "g": "Green",
+    "y": "Yellow",
+}
+/**
+ * Fills the robot container from parsing the text string
+ * @param {string} text 
+ * @param {Container} cont 
+ * @param {TextureCache} id
+ * @param {Array} robots
+ */
+function fillRobots(text, cont, id, robots) {
+    let blocks = text.split('\n');
+    let bat = "";
+    let ht = 0;
+    for(block in blocks) {
+        for (i = 0; i < 16; i++) {
+            let bit = blocks[block][i]
+            let x = i * 32 + director.board.x;
+            let y = ht * 32 + director.board.y;
+
+            if (bit !== "-") {
+                let color = robotMap[bit];
+
+                let fileName = "robot_" + color.toLowerCase() + ".png"
+                let shortName = color + " robot"
+                let displayName = shortName;
+                //robots[bit] = new Target(cont, id[fileName], shortName, displayName, x, y);
+                robots[bit] = new Robot(cont, id[fileName], displayName, displayName, x, y);
+            }
+            bat += bit;
+        }
+        bat += "\n";
+        ht++;
+    }
+    console.log(bat);
+}

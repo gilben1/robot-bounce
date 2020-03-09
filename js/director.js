@@ -60,11 +60,6 @@ class Director {
         this.tileCont = new Container();
         this.id = resources["img/spritesheet.json"].textures;
 
-        this.activeRobot = this.robots['red'] = new Robot(this.robotCont, this.id["robot_red.png"], "red Robot", "Red Robot", 2 * 32 + this.board.x, 14 * 32 + this.board.y);
-        this.robots['blue'] = new Robot(this.robotCont, this.id["robot_blue.png"], "blue Robot", "Blue Robot", 13 * 32 + this.board.x, 1 * 32 + this.board.y);
-        this.robots['green'] = new Robot(this.robotCont, this.id["robot_green.png"], "green Robot", "Green Robot", 11 * 32 + this.board.x, 13 * 32 + this.board.y);
-        this.robots['yellow'] = new Robot(this.robotCont, this.id["robot_yellow.png"], "yellow Robot", "Yellow Robot", 3 * 32 + this.board.x, 1 * 32 + this.board.y);
-
         this.activeMarker = new Graphics();
         this.renderMarker();
 
@@ -76,8 +71,8 @@ class Director {
         this.move.addChild(this.activeText);
         this.move.addChild(this.tileCont);
         this.move.addChild(this.targetCont);
-        this.move.addChild(this.robotCont);
         this.move.addChild(this.wallCont);
+        this.move.addChild(this.robotCont);
         this.move.addChild(this.activeMarker);
 
         this.app.stage.addChild(this.move);
@@ -124,6 +119,11 @@ class Director {
 
                 if (this.activeTarget === undefined) {
                     this.activeTarget = this.targets[randomInt(0, 17)];
+                }
+
+                if (this.activeRobot === undefined) {
+                    this.activeRobot = this.robots['r'];
+                    this.renderMarker();
                 }
 
                 // If the target has been set and there's an active robot, start processing things
@@ -194,18 +194,18 @@ class Director {
      */
     cycleRobots() {
         switch(this.activeRobot) {
-            case this.robots['red']:
-            this.activeRobot = this.robots['blue'];
+            case this.robots['r']:
+            this.activeRobot = this.robots['b'];
             break;
-            case this.robots['blue']:
-            this.activeRobot = this.robots['green'];
+            case this.robots['b']:
+            this.activeRobot = this.robots['g'];
             break;
-            case this.robots['green']:
-            this.activeRobot = this.robots['yellow'];
+            case this.robots['g']:
+            this.activeRobot = this.robots['y'];
             break;
             case undefined:
-            case this.robots['yellow']:
-            this.activeRobot = this.robots['red'];
+            case this.robots['y']:
+            this.activeRobot = this.robots['r'];
             break;
         }
         this.renderMarker();
@@ -315,6 +315,9 @@ class Director {
      * Re-draw the marker about the active robot
      */
     renderMarker() {
+        if (this.activeRobot === undefined) {
+            return;
+        }
         this.activeMarker.clear();
 
         let robX = this.activeRobot.getPos.x;
