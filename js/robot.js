@@ -4,6 +4,7 @@ class Robot extends Entity {
     checkpoint
     trail
     lastPoint
+    lastDir
 
     constructor(container, sprite, name, displayName, x, y) {
         // store self to pass onto click events to refer to this object
@@ -41,13 +42,14 @@ class Robot extends Entity {
             }
         }
 
+        this.lastDir = dir;
         switch(dir) {
             case "n":
                 if (notColliding(robots, north) && inBounds(north)) {
                     this.add(0, -32);
-                    this.drawLineSegment();
+                    //this.drawLineSegment();
                     console.log("Moving north");
-                    this.lastPoint = this.getCenter;
+                    //this.lastPoint = this.getCenter;
                     return true;
                 }
                 else {
@@ -57,9 +59,9 @@ class Robot extends Entity {
             case "e":
                 if (notColliding(robots, east) && inBounds(east)) {
                     this.add(32, 0);
-                    this.drawLineSegment();
+                    //this.drawLineSegment();
                     console.log("Moving east");
-                    this.lastPoint = this.getCenter;
+                    //this.lastPoint = this.getCenter;
                     return true;
                 }
                 else {
@@ -69,9 +71,9 @@ class Robot extends Entity {
             case "w":
                 if (notColliding(robots, west) && inBounds(west)) {
                     this.add(-32, 0);
-                    this.drawLineSegment();
+                    //this.drawLineSegment();
                     console.log("Moving west");
-                    this.lastPoint = this.getCenter;
+                    //this.lastPoint = this.getCenter;
                     return true;
                 }
                 else {
@@ -81,9 +83,9 @@ class Robot extends Entity {
             case "s":
                 if (notColliding(robots, south) && inBounds(south)) {
                     this.add(0,32);
-                    this.drawLineSegment();
+                    //this.drawLineSegment();
                     console.log("Moving south");
-                    this.lastPoint = this.getCenter;
+                    //this.lastPoint = this.getCenter;
                     return true;
                 }
                 else {
@@ -111,6 +113,7 @@ class Robot extends Entity {
      */
     rewind(){
         this.setPos(this.checkpoint.x, this.checkpoint.y);
+        this.trail.clear();
     }
 
     /**
@@ -123,10 +126,63 @@ class Robot extends Entity {
         }
     }
 
+    /**
+     * Adds a line segment from the last center point to the next center point
+     */
     drawLineSegment() {
+        let arrowPoint1 = {x: 0, y: 0}
+        let arrowPoint2 = {x: 0, y: 0}
+        switch(this.lastDir) {
+            case "n":
+                arrowPoint1 = {
+                    x: this.getCenter.x - 10,
+                    y: this.getCenter.y + 10
+                }
+                arrowPoint2 = {
+                    x: this.getCenter.x + 10,
+                    y: this.getCenter.y + 10
+                }
+                break;
+            case "s":
+                arrowPoint1 = {
+                    x: this.getCenter.x - 10,
+                    y: this.getCenter.y - 10
+                }
+                arrowPoint2 = {
+                    x: this.getCenter.x + 10,
+                    y: this.getCenter.y - 10
+                }
+                break;
+            case "e":
+                arrowPoint1 = {
+                    x: this.getCenter.x - 10,
+                    y: this.getCenter.y + 10
+                }
+                arrowPoint2 = {
+                    x: this.getCenter.x - 10,
+                    y: this.getCenter.y - 10
+                }
+                break;
+            case "w":
+                arrowPoint1 = {
+                    x: this.getCenter.x + 10,
+                    y: this.getCenter.y - 10
+                }
+                arrowPoint2 = {
+                    x: this.getCenter.x + 10,
+                    y: this.getCenter.y + 10
+                }
+                break;
+
+        }
+
+
         let points = [
             this.lastPoint.x, this.lastPoint.y,
-            this.getCenter.x, this.getCenter.y
+            this.getCenter.x, this.getCenter.y,
+            arrowPoint1.x, arrowPoint1.y,
+            arrowPoint2.x, arrowPoint2.y
+            
         ]
 
         this.trail.lineStyle(4, colorMap[this.name.charAt(0)], 1);

@@ -55,8 +55,6 @@ class Director {
 
         this.move = new Container();
         this.robotCont = new Container();
-        this.robotCont.sortableChildren = true;
-
         this.targetCont = new Container();
         this.wallCont = new Container();
         this.tileCont = new Container();
@@ -182,7 +180,9 @@ class Director {
                 // If the loop actually moved the robot, add to the move count
                 if (moves !== 0) {
                     this.scoreBoard.add();
+                    this.activeRobot.drawLineSegment();
                     this.renderMarker();
+                    this.activeRobot.lastPoint = this.activeRobot.getCenter;
                 }
             }
             else {
