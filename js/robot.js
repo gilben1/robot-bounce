@@ -2,6 +2,9 @@ console.log("Loaded robot.js")
 
 class Robot extends Entity {
     checkpoint
+    trail
+    lastPoint
+
     constructor(container, sprite, name, displayName, x, y) {
         // store self to pass onto click events to refer to this object
         super(container, sprite, name, displayName, x, y); 
@@ -13,7 +16,10 @@ class Robot extends Entity {
         this.checkpoint = {
             x: x,
             y: y
-        }
+        };
+        this.trail = new Graphics();
+        this.lastPoint = this.getCenter;
+        container.addChild(this.trail);
     }
 
     /**
@@ -39,7 +45,9 @@ class Robot extends Entity {
             case "n":
                 if (notColliding(robots, north) && inBounds(north)) {
                     this.add(0, -32);
+                    this.drawLineSegment();
                     console.log("Moving north");
+                    this.lastPoint = this.getCenter;
                     return true;
                 }
                 else {
@@ -49,7 +57,9 @@ class Robot extends Entity {
             case "e":
                 if (notColliding(robots, east) && inBounds(east)) {
                     this.add(32, 0);
+                    this.drawLineSegment();
                     console.log("Moving east");
+                    this.lastPoint = this.getCenter;
                     return true;
                 }
                 else {
@@ -59,7 +69,9 @@ class Robot extends Entity {
             case "w":
                 if (notColliding(robots, west) && inBounds(west)) {
                     this.add(-32, 0);
+                    this.drawLineSegment();
                     console.log("Moving west");
+                    this.lastPoint = this.getCenter;
                     return true;
                 }
                 else {
@@ -69,7 +81,9 @@ class Robot extends Entity {
             case "s":
                 if (notColliding(robots, south) && inBounds(south)) {
                     this.add(0,32);
+                    this.drawLineSegment();
                     console.log("Moving south");
+                    this.lastPoint = this.getCenter;
                     return true;
                 }
                 else {
@@ -108,6 +122,19 @@ class Robot extends Entity {
             y: this.getPos.y
         }
     }
+
+    drawLineSegment() {
+        let points = [
+            this.lastPoint.x, this.lastPoint.y,
+            this.getCenter.x, this.getCenter.y
+        ]
+
+        this.trail.lineStyle(4, colorMap[this.name.charAt(0)], 1);
+
+        //this.trail.drawRect(this.activeRobot.getPos.x, this.activeRobot.getPos.y, 32, 32);
+        this.trail.drawPolygon(points);
+    }
+
 }
 
 
@@ -117,6 +144,14 @@ let robotMap = {
     "g": "Green",
     "y": "Yellow",
 }
+
+let colorMap = {
+    "R": 0xFF0000,
+    "G": 0x298F2E,
+    "B": 0x000DFF,
+    "Y": 0xFFEA00
+}
+
 /**
  * Fills the robot container from parsing the text string
  * @param {string} text 

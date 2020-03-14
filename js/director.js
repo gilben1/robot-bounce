@@ -55,6 +55,8 @@ class Director {
 
         this.move = new Container();
         this.robotCont = new Container();
+        this.robotCont.sortableChildren = true;
+
         this.targetCont = new Container();
         this.wallCont = new Container();
         this.tileCont = new Container();

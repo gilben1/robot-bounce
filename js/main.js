@@ -28,8 +28,10 @@ let app = new Application({
 
 // Add the application view to the html after the window has loaded
 window.onload = () => {
-    console.log("Appending app.view to document body...")
-    document.body.appendChild(app.view);
+    console.log("Appending app.view to ")
+    let boardDiv = document.getElementById("boardDiv");
+    //document.body.appendChild(app.view);
+    boardDiv.appendChild(app.view);
 };
 
 loader
