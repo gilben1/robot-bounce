@@ -43,6 +43,7 @@ class Director {
     // html elements
     rewindButton
     continueButton
+    toggleTrailsButton
 
     constructor(app, resources) {
         this.app = app;
@@ -79,17 +80,19 @@ class Director {
         this.app.stage.addChild(this.move);
         this.state = this.move;
 
-        this.rewindButton = this.setupButton(this.rewindButton, "Rewind", () => { // Rewind functionality
+        this.rewindButton = this.setupButton(this.rewindButton, "Rewind", "postButtonDiv", () => { // Rewind functionality
             this.scoreBoard.reset();
             this.handleRobotRewind();
             this.state = this.move;
         });
-        this.continueButton = this.setupButton(this.continueButton, "Continue", () => { // continue functionality
+        this.continueButton = this.setupButton(this.continueButton, "Continue", "postButtonDiv", () => { // continue functionality
             this.newTarget();
             this.updateRobotCheckpoints();
             this.scoreBoard.reset();
             this.state = this.move;
         });
+        this.toggleTrailsButton = this.setupButton(this.toggleTrailsButton, "Toggle Trails", "preButtonDiv", () => this.toggleRobotTrails());
+        this.showButton(this.toggleTrailsButton);
     }
 
 
@@ -236,6 +239,15 @@ class Director {
         this.renderMarker();
     }
 
+    /**
+     * Toggles the trails visibility on each robot
+     */
+    toggleRobotTrails() {
+        for (let r in this.robots) {
+            this.robots[r].toggleTrail();
+        }
+    }
+
     /*
     ====================
     | TARGET FUNCTIONS |
@@ -287,15 +299,16 @@ class Director {
      * Sets up a button with specified text and onclick function
      * @param {button} buttonName 
      * @param {String} buttonText 
+     * @param {String} divName - name of the div to add to
      * @param {function} func - onclick function to execute
      */
-    setupButton(buttonName, buttonText, func) {
+    setupButton(buttonName, buttonText, divName, func) {
         buttonName = document.createElement("button");
         buttonName.innerHTML = buttonText;
         this.hideButton(buttonName);
         buttonName.onclick = func;
 
-        let buttonDiv = document.getElementById("buttonDiv");
+        let buttonDiv = document.getElementById(divName);
         buttonDiv.appendChild(buttonName);
 
         return buttonName;
@@ -337,7 +350,6 @@ class Director {
 
         this.activeMarker.lineStyle(4, 0xFF3300, 1);
 
-        //this.activeMarker.drawRect(this.activeRobot.getPos.x, this.activeRobot.getPos.y, 32, 32);
         this.activeMarker.drawPolygon(points);
     }
 
