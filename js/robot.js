@@ -18,6 +18,7 @@ class Robot extends Entity {
             x: x,
             y: y
         };
+        
         this.trail = new Graphics();
         this.setLineStyle();
         this.lastPoint = this.getCenter;
@@ -215,6 +216,13 @@ class Robot extends Entity {
     clearTrail() {
         this.trail.clear();
         this.setLineStyle();
+    }
+
+    /**
+     * Toggles visibility on the trail
+     */
+    toggleTrail() {
+        this.trail.visible = !this.trail.visible;
     }
 
 }
