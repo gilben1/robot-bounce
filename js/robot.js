@@ -12,6 +12,7 @@ class Robot extends Entity {
         this.sprite.on('mousedown', (e) => {
             director.activeRobot = this;
             director.renderMarker();
+            director.applyOnlyActiveTrailRule();
         })
         this.sprite.interactive = true;
         this.checkpoint = {
