@@ -218,16 +218,9 @@ class Director {
             break;
         }
         this.renderMarker();
-        if (this.activeTrailsFlag === true && this.toggleTrailsCB.checked === true) {
-            for (let r in this.robots) {
-                if (this.robots[r] !== this.activeRobot) {
-                    this.robots[r].disableTrail();
-                }
-                else {
-                    this.robots[r].enableTrail();
-                }
-            }
-        }
+
+        // If we need to disable all but the active robot, do that now
+        this.applyOnlyActiveTrailRule();
     }
 
     /**
@@ -292,6 +285,19 @@ class Director {
                 }
                 else {
                     this.robots[r].disableTrail();
+                }
+            }
+        }
+    }
+
+    applyOnlyActiveTrailRule() {
+        if (this.activeTrailsFlag === true && this.toggleTrailsCB.checked === true) {
+            for (let r in this.robots) {
+                if (this.robots[r] !== this.activeRobot) {
+                    this.robots[r].disableTrail();
+                }
+                else {
+                    this.robots[r].enableTrail();
                 }
             }
         }
