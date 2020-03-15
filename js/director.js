@@ -5,6 +5,8 @@ class Director {
     // public states
     state
     scoreBoard
+    activeTrailsFlag = false;
+
     // collections
     robots = {}
     targets = {}
@@ -44,6 +46,7 @@ class Director {
     rewindButton
     continueButton
     toggleTrailsCB
+    activeTrailCB
 
     constructor(app, resources) {
         this.app = app;
@@ -91,7 +94,8 @@ class Director {
             this.scoreBoard.reset();
             this.state = this.move;
         });
-        this.toggleTrailsCB = this.setupCheckBox(this.toggleTrailsCB, "Trails", "preButtonDiv", () => this.toggleRobotTrails());
+        this.toggleTrailsCB = this.setupCheckBox(this.toggleTrailsCB, "Trails", "preButtonDiv", true, () => this.toggleRobotTrails());
+        this.activeTrailCB = this.setupCheckBox(this.activeTrailCB, "Active Trail Only", "preButtonDiv", false, () => this.activeTrailToggle());
     }
 
 
@@ -214,6 +218,16 @@ class Director {
             break;
         }
         this.renderMarker();
+        if (this.activeTrailsFlag === true && this.toggleTrailsCB.checked === true) {
+            for (let r in this.robots) {
+                if (this.robots[r] !== this.activeRobot) {
+                    this.robots[r].disableTrail();
+                }
+                else {
+                    this.robots[r].enableTrail();
+                }
+            }
+        }
     }
 
     /**
@@ -242,8 +256,44 @@ class Director {
      * Toggles the trails visibility on each robot
      */
     toggleRobotTrails() {
-        for (let r in this.robots) {
-            this.robots[r].toggleTrail();
+        // don't want to toggle active trails if this element is unchecked
+        this.activeTrailCB.disabled = !this.toggleTrailsCB.checked;
+
+        this.showHideTrails();
+    }
+
+    /**
+     * 
+     */
+    activeTrailToggle() {
+        this.activeTrailsFlag = !this.activeTrailsFlag;
+        this.showHideTrails();
+    }
+
+    /**
+     * Toggles the trails, depending on values of checkboxes and flags
+     */
+    showHideTrails() {
+        if (this.activeTrailsFlag === true && this.toggleTrailsCB.checked === true) {
+            for (let r in this.robots) {
+                if (this.robots[r] !== this.activeRobot) {
+                    this.robots[r].disableTrail();
+                }
+                else {
+                    this.robots[r].enableTrail();
+                }
+            }
+        }
+        else {
+            let show = this.toggleTrailsCB.checked;
+            for (let r in this.robots) {
+                if (show === true) {
+                    this.robots[r].enableTrail();
+                }
+                else {
+                    this.robots[r].disableTrail();
+                }
+            }
         }
     }
 
@@ -334,13 +384,14 @@ class Director {
      * @param {Checkbox} checkBox 
      * @param {String} checkBoxLabel 
      * @param {String} divName 
+     * @param {boolean} checked
      * @param {Function} func 
      */
-    setupCheckBox(checkBox, checkBoxLabel, divName, func) {
+    setupCheckBox(checkBox, checkBoxLabel, divName, checked, func) {
         checkBox = document.createElement("input");
         checkBox.type = "checkbox";
         checkBox.id = checkBoxLabel;
-        checkBox.checked = true;
+        checkBox.checked = checked;
         checkBox.onclick = func;
 
         let label = document.createElement("label");
@@ -350,6 +401,8 @@ class Director {
         let uiDiv = document.getElementById(divName);
         uiDiv.appendChild(checkBox);
         uiDiv.appendChild(label);
+
+        return checkBox;
     }
 
 

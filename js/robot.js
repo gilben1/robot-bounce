@@ -225,6 +225,19 @@ class Robot extends Entity {
         this.trail.visible = !this.trail.visible;
     }
 
+    /**
+     * Explicitly disables the robot trail
+     */
+    disableTrail() {
+        this.trail.visible = false;
+    }
+
+    /**
+     * Explicitly enables the robot trail
+     */
+    enableTrail() {
+        this.trail.visible = true;
+    }
 }
 
 
