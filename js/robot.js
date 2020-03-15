@@ -19,7 +19,7 @@ class Robot extends Entity {
             y: y
         };
         this.trail = new Graphics();
-        this.trail.lineStyle(4, colorMap[this.name.charAt(0)], 1);
+        this.setLineStyle();
         this.lastPoint = this.getCenter;
         container.addChildAt(this.trail, 0);
     }
@@ -121,6 +121,14 @@ class Robot extends Entity {
     }
 
     /**
+     * Sets the line style for the trail
+     */
+    setLineStyle() {
+        this.trail.lineStyle(4, colorMap[this.name.charAt(0)], 0.5);
+    }
+
+
+    /**
      * Adds a line segment from the last center point to the next center point
      */
     drawLineSegment() {
@@ -183,16 +191,22 @@ class Robot extends Entity {
 
         }
 
-        let points = [
+        let line1 = [
             this.lastPoint.x, this.lastPoint.y,
-            this.getCenter.x + centerXDif, this.getCenter.y + centerYDif,
+            this.getCenter.x + centerXDif, this.getCenter.y + centerYDif
+        ]
+        let line2 = [
             arrowPoint1.x, arrowPoint1.y,
+            this.getCenter.x + centerXDif, this.getCenter.y + centerYDif
+        ]
+        let line3 = [
             this.getCenter.x + centerXDif, this.getCenter.y + centerYDif,
             arrowPoint2.x, arrowPoint2.y
-            
         ]
 
-        this.trail.drawPolygon(points);
+        this.trail.drawPolygon(line1);
+        this.trail.drawPolygon(line2);
+        this.trail.drawPolygon(line3);
     }
 
     /**
@@ -200,7 +214,7 @@ class Robot extends Entity {
      */
     clearTrail() {
         this.trail.clear();
-        this.trail.lineStyle(4, colorMap[this.name.charAt(0)], 1);
+        this.setLineStyle();
     }
 
 }
