@@ -23,6 +23,13 @@ class Entity {
         };
     }
 
+    get getCenter() {
+        return {
+            x: this.sprite.x + (this.sprite.width / 2),
+            y: this.sprite.y + (this.sprite.height / 2)
+        }
+    }
+
     /**
      * Sets the x y coordinates of the sprite
      * @param {Integer} x 
