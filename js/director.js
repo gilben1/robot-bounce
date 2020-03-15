@@ -295,7 +295,8 @@ class Director {
         this.hideButton(buttonName);
         buttonName.onclick = func;
 
-        document.body.appendChild(buttonName);
+        let buttonDiv = document.getElementById("buttonDiv");
+        buttonDiv.appendChild(buttonName);
 
         return buttonName;
     }
