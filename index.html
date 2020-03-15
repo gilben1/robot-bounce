@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <title>Robot Bounce by Nicholas Gilbert</title>
 </head>
-  Robot Bounce 
+  Robot Bounce: A puzzle robot game 
   <script src="pixi/pixi.min.js"></script>
   <script src="js/director.js"></script>
   <script src="js/main.js"></script>
@@ -16,7 +16,17 @@
   <script src="js/score.js"></script>
 
   <div id=boardDiv></div>
-
+  <div id=scoreDiv></div>
+  <div id=buttonDiv></div>
+  <div id=docDiv>
+    How to play:
+    <p>
+      &nbsp;&nbsp;Use arrow keys to move the active robot (denoted by text and red arrow) around the board.<br>
+      &nbsp;&nbsp;Press TAB, or mouse click on another robot to change the active robot.<br><br>
+      &nbsp;&nbsp;The objective is to move the robot of the color matching the active target, shown in the center, to the target itself.<br>
+      &nbsp;&nbsp;The goal is to minimize the number of moves it takes to do this. After reaching the target, you can rewind to try and get a lower score.<br>
+    </p>
+  </div>
 <body>
 </body>
 </html>

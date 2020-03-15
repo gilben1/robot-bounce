@@ -7,7 +7,8 @@ class Score {
 
     constructor(x, y, container) {
         this.list = document.createElement("ol");
-        document.body.appendChild(this.list)
+        let scoreDiv = document.getElementById("scoreDiv");
+        scoreDiv.appendChild(this.list)
         this.board = []
 
         this.text = new Text("Moves: 0");

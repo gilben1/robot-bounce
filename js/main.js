@@ -30,7 +30,6 @@ let app = new Application({
 window.onload = () => {
     console.log("Appending app.view to ")
     let boardDiv = document.getElementById("boardDiv");
-    //document.body.appendChild(app.view);
     boardDiv.appendChild(app.view);
 };
 
