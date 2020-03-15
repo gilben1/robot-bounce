@@ -43,7 +43,7 @@ class Director {
     // html elements
     rewindButton
     continueButton
-    toggleTrailsButton
+    toggleTrailsCB
 
     constructor(app, resources) {
         this.app = app;
@@ -91,8 +91,7 @@ class Director {
             this.scoreBoard.reset();
             this.state = this.move;
         });
-        this.toggleTrailsButton = this.setupButton(this.toggleTrailsButton, "Toggle Trails", "preButtonDiv", () => this.toggleRobotTrails());
-        this.showButton(this.toggleTrailsButton);
+        this.toggleTrailsCB = this.setupCheckBox(this.toggleTrailsCB, "Trails", "preButtonDiv", () => this.toggleRobotTrails());
     }
 
 
@@ -329,6 +328,32 @@ class Director {
     showButton(buttonName) {
         buttonName.style.display = "inline-block"
     }
+
+    /**
+     * Sets up a checkbox ui element
+     * @param {Checkbox} checkBox 
+     * @param {String} checkBoxLabel 
+     * @param {String} divName 
+     * @param {Function} func 
+     */
+    setupCheckBox(checkBox, checkBoxLabel, divName, func) {
+        checkBox = document.createElement("input");
+        checkBox.type = "checkbox";
+        checkBox.id = checkBoxLabel;
+        checkBox.checked = true;
+        checkBox.onclick = func;
+
+        let label = document.createElement("label");
+        label.htmlFor = checkBoxLabel;
+        label.appendChild(document.createTextNode(checkBoxLabel));
+
+        let uiDiv = document.getElementById(divName);
+        uiDiv.appendChild(checkBox);
+        uiDiv.appendChild(label);
+    }
+
+
+
 
     /**
      * Re-draw the marker about the active robot
