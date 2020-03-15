@@ -19,8 +19,9 @@ class Robot extends Entity {
             y: y
         };
         this.trail = new Graphics();
+        this.trail.lineStyle(4, colorMap[this.name.charAt(0)], 1);
         this.lastPoint = this.getCenter;
-        container.addChild(this.trail);
+        container.addChildAt(this.trail, 0);
     }
 
     /**
@@ -47,9 +48,7 @@ class Robot extends Entity {
             case "n":
                 if (notColliding(robots, north) && inBounds(north)) {
                     this.add(0, -32);
-                    //this.drawLineSegment();
                     console.log("Moving north");
-                    //this.lastPoint = this.getCenter;
                     return true;
                 }
                 else {
@@ -59,9 +58,7 @@ class Robot extends Entity {
             case "e":
                 if (notColliding(robots, east) && inBounds(east)) {
                     this.add(32, 0);
-                    //this.drawLineSegment();
                     console.log("Moving east");
-                    //this.lastPoint = this.getCenter;
                     return true;
                 }
                 else {
@@ -71,9 +68,7 @@ class Robot extends Entity {
             case "w":
                 if (notColliding(robots, west) && inBounds(west)) {
                     this.add(-32, 0);
-                    //this.drawLineSegment();
                     console.log("Moving west");
-                    //this.lastPoint = this.getCenter;
                     return true;
                 }
                 else {
@@ -83,9 +78,7 @@ class Robot extends Entity {
             case "s":
                 if (notColliding(robots, south) && inBounds(south)) {
                     this.add(0,32);
-                    //this.drawLineSegment();
                     console.log("Moving south");
-                    //this.lastPoint = this.getCenter;
                     return true;
                 }
                 else {
@@ -104,7 +97,7 @@ class Robot extends Entity {
      */
     atCorrectTarget(target) {
         let targetColor = target.name[target.name.length - 1];
-        let thisColor = this.name[0];
+        let thisColor = this.name[0].toLowerCase();
         return (thisColor === targetColor || targetColor === 'w') && this.samePosition(target);
     }
 
@@ -113,7 +106,8 @@ class Robot extends Entity {
      */
     rewind(){
         this.setPos(this.checkpoint.x, this.checkpoint.y);
-        this.trail.clear();
+        this.clearTrail();
+        this.lastPoint = this.getCenter;
     }
 
     /**
@@ -132,63 +126,81 @@ class Robot extends Entity {
     drawLineSegment() {
         let arrowPoint1 = {x: 0, y: 0}
         let arrowPoint2 = {x: 0, y: 0}
+        let xDif = 10;
+        let yDif = 10;
+        let centerXDif = 0;
+        let centerYDif = 0;
+        // set the points of the arrow to render based on the last direction we took
         switch(this.lastDir) {
             case "n":
                 arrowPoint1 = {
-                    x: this.getCenter.x - 10,
-                    y: this.getCenter.y + 10
+                    x: this.getCenter.x - xDif,
+                    y: this.getCenter.y + yDif + 16
                 }
                 arrowPoint2 = {
-                    x: this.getCenter.x + 10,
-                    y: this.getCenter.y + 10
+                    x: this.getCenter.x + xDif,
+                    y: this.getCenter.y + yDif + 16
                 }
+                centerXDif = 0
+                centerYDif = 16
                 break;
             case "s":
                 arrowPoint1 = {
-                    x: this.getCenter.x - 10,
-                    y: this.getCenter.y - 10
+                    x: this.getCenter.x - xDif,
+                    y: this.getCenter.y - yDif - 16
                 }
                 arrowPoint2 = {
-                    x: this.getCenter.x + 10,
-                    y: this.getCenter.y - 10
+                    x: this.getCenter.x + xDif,
+                    y: this.getCenter.y - yDif - 16
                 }
+                centerXDif = 0
+                centerYDif = -16
                 break;
             case "e":
                 arrowPoint1 = {
-                    x: this.getCenter.x - 10,
-                    y: this.getCenter.y + 10
+                    x: this.getCenter.x - xDif - 16,
+                    y: this.getCenter.y + yDif
                 }
                 arrowPoint2 = {
-                    x: this.getCenter.x - 10,
-                    y: this.getCenter.y - 10
+                    x: this.getCenter.x - xDif - 16,
+                    y: this.getCenter.y - yDif
                 }
+                centerXDif = -16
+                centerYDif = 0
                 break;
             case "w":
                 arrowPoint1 = {
-                    x: this.getCenter.x + 10,
-                    y: this.getCenter.y - 10
+                    x: this.getCenter.x + xDif + 16,
+                    y: this.getCenter.y - yDif
                 }
                 arrowPoint2 = {
-                    x: this.getCenter.x + 10,
-                    y: this.getCenter.y + 10
+                    x: this.getCenter.x + xDif + 16,
+                    y: this.getCenter.y + yDif
                 }
+                centerXDif = 16
+                centerYDif = 0
                 break;
 
         }
 
-
         let points = [
             this.lastPoint.x, this.lastPoint.y,
-            this.getCenter.x, this.getCenter.y,
+            this.getCenter.x + centerXDif, this.getCenter.y + centerYDif,
             arrowPoint1.x, arrowPoint1.y,
+            this.getCenter.x + centerXDif, this.getCenter.y + centerYDif,
             arrowPoint2.x, arrowPoint2.y
             
         ]
 
-        this.trail.lineStyle(4, colorMap[this.name.charAt(0)], 1);
-
-        //this.trail.drawRect(this.activeRobot.getPos.x, this.activeRobot.getPos.y, 32, 32);
         this.trail.drawPolygon(points);
+    }
+
+    /**
+     * Clears the existing trail behind the robot
+     */
+    clearTrail() {
+        this.trail.clear();
+        this.trail.lineStyle(4, colorMap[this.name.charAt(0)], 1);
     }
 
 }
@@ -240,4 +252,6 @@ function fillRobots(text, cont, id, robots) {
         ht++;
     }
     console.log(bat);
+    // sort the container
+    cont.updateTransform()
 }

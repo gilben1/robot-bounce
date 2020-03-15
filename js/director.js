@@ -55,6 +55,7 @@ class Director {
 
         this.move = new Container();
         this.robotCont = new Container();
+        this.robotCont.sortableChildren = true;
         this.targetCont = new Container();
         this.wallCont = new Container();
         this.tileCont = new Container();
@@ -218,7 +219,8 @@ class Director {
      */
     updateRobotCheckpoints() {
         for (let r in this.robots) {
-            this.robots[r].updateCheckpoint()
+            this.robots[r].updateCheckpoint();
+            this.robots[r].clearTrail();
         }
     }
 
@@ -228,8 +230,9 @@ class Director {
     handleRobotRewind() {
         for (let r in this.robots) {
             this.robots[r].rewind();
+            this.robots[r].clearTrail();
         }
-        this.scoreBoard.reset()
+        this.scoreBoard.reset();
         this.renderMarker();
     }
 
@@ -245,7 +248,7 @@ class Director {
     newTarget() {
         if (this.activeTarget !== undefined) {
             // Remove the active target from the viable list of targets
-            this.activeTarget.hideMirror()
+            this.activeTarget.hideMirror();
 
             let targetKey = Object.keys(this.targets).find(key => this.targets[key] === this.activeTarget);
             delete this.targets[targetKey];
