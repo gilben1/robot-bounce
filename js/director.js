@@ -6,6 +6,7 @@ class Director {
     state
     scoreBoard
     activeTrailsFlag = false;
+    generator
 
     // collections
     robots = {}
@@ -168,6 +169,14 @@ class Director {
             .then((response) => response.text())
             .then((text) => func(text, cont, this.id, coll));
     }
+
+    /**
+     * Initializes the generator
+     */
+    initGenerator() {
+        this.generator = new Generator(1111222233334444);
+    }
+
 
     /*
     ===================

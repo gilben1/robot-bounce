@@ -13,6 +13,7 @@ let Application = PIXI.Application,
 
 let director; // director object;
 
+
 let type = "WebGL"
 if(!PIXI.utils.isWebGLSupported()){
     type = "canvas"
@@ -51,13 +52,15 @@ loader
         
         director.loadEntities(fillRobots, 'data/robots.txt', director.robotCont, director.robots);
 
+        director.initGenerator();
+
         // Start the gameloop
         director.initGame();
     });
 
 /**
  * Generates a random number between min and max
- * @param {string} min - Lower bound
+ * @param {Integer} min - Lower bound
  * @param {Integer} max - Upper bound
  */
 function randomInt(min, max) {
