@@ -58,18 +58,13 @@ class Generator {
     }    
 
     wallsGenerate(seed) {
-        //let numInternal = Math.pow(seed, 23) % 3;
         let numInternal = this.random.random_range(0, 3);
         console.log("num: " + numInternal);
         let numExternal = 8;
 
-        //let internalXmin = (Math.pow(seed, 17) % 5) + 2;
-        //let internalXmax = (Math.pow(seed, 17) % 5) + 8;
         let internalXmin = this.random.random_range(2, 8);
         let internalXmax = this.random.random_range(8, 14);
 
-        //let internalYmin = (Math.pow(seed, 23) % 5) + 2;
-        //let internalYmax = (Math.pow(seed, 23) % 5) + 8;
         let internalYmin = this.random.random_range(2, 8);
         let internalYmax = this.random.random_range(8, 14);
 
@@ -105,24 +100,24 @@ class Generator {
      * @param {number} x 
      * @param {number} y 
      */
-    completeWall(cell, x, y) {
+    completeWall(cell, y, x) {
         for (let wall in cell.walls) {
             switch(cell.walls[wall]) {
                 case 'n':
-                    this.board[x][y - 1].walls.push('s');
-                    console.log("Set direction s at coordinate point (" + x + ", " + (y-1) + ")");
+                    this.board[y - 1][x].walls.push('s');
+                    console.log("Set direction s at coordinate point (" + (y-1) + ", " + x + ")");
                     break;
                 case 's':
-                    this.board[x][y + 1].walls.push('n');
-                    console.log("Set direction n at coordinate point (" + x + ", " + (y+1) + ")");
+                    this.board[y + 1][x].walls.push('n');
+                    console.log("Set direction n at coordinate point (" + (y+1) + ", " + x + ")");
                     break;
                 case 'w':
-                    this.board[x - 1][y].walls.push('e');
-                    console.log("Set direction e at coordinate point (" + (x-1) + ", " + y + ")");
+                    this.board[y][x - 1].walls.push('e');
+                    console.log("Set direction e at coordinate point (" + y + ", " + (x-1) + ")");
                     break;
                 case 'e':
-                    this.board[x + 1][y].walls.push('w');
-                    console.log("Set direction w at coordinate point (" + (x+1) + ", " + y + ")");
+                    this.board[y][x + 1].walls.push('w');
+                    console.log("Set direction w at coordinate point (" + y + ", " + (x+1) + ")");
                     break;
             }
         }
@@ -137,5 +132,39 @@ class Generator {
             || (x == 8 && (this.ignored.indexOf(y) !== -1))
             || (x == 9 && (this.ignored.indexOf(y) !== -1))
     }
+
+    populateBoard(targetCont, targets, robotCont, robots, wallCont, walls, id) {
+        for(let i = 0; i < 16; i++) {
+            for (let j = 0; j < 16; j++) {
+                let cell = this.board[j][i];
+                let x = cell.coord.x;
+                let y = cell.coord.y;
+                // fill robots
+
+                // fill targets
+
+                // fill walls
+                let index = 0;
+                for (let wall in cell.walls) {
+                    switch(cell.walls[wall]) {
+                        case 'n':
+                            walls[index] = new Wall(wallCont, id["wall_north.png"], "n", "North", x, y);
+                            break;
+                        case 's':
+                            walls[index] = new Wall(wallCont, id["wall_south.png"], "s", "South", x, y);
+                            break;
+                        case 'w':
+                            walls[index] = new Wall(wallCont, id["wall_west.png"], "w", "West", x, y);
+                            break;
+                        case 'e':
+                            walls[index] = new Wall(wallCont, id["wall_east.png"], "e", "East", x, y);
+                            break;
+                    }
+                }
+            }
+        }   
+    }
+
+
 
 }

@@ -174,9 +174,13 @@ class Director {
      * Initializes the generator
      */
     initGenerator() {
-        this.generator = new Generator(1111222233334444);
+        this.generator = new Generator(); // TODO, give seed
     }
 
+    generateBoard() {
+        this.generator.wallsGenerate();
+        this.generator.populateBoard(this.targetCont, this.targets, this.robotCont, this.robots, this.wallCont, this.walls, this.id);
+    }
 
     /*
     ===================
