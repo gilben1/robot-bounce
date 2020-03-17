@@ -57,41 +57,122 @@ class Generator {
         }
     }    
 
-    wallsGenerate(seed) {
-        let numInternal = this.random.random_range(0, 3);
+    wallsGenerate() {
+        /*
+        =========================================
+        Internal walls
+        =========================================
+        */
+
+        let numInternal = this.random.range_incl(0, 3);
         console.log("num: " + numInternal);
-        let numExternal = 8;
 
-        let internalXmin = this.random.random_range(2, 8);
-        let internalXmax = this.random.random_range(8, 14);
+        let internalXmin = this.random.range_incl(2, 7);
+        let internalXmax = this.random.range_incl(8, 13);
 
-        let internalYmin = this.random.random_range(2, 8);
-        let internalYmax = this.random.random_range(8, 14);
+        let internalYmin = this.random.range_incl(2, 7);
+        let internalYmax = this.random.range_incl(8, 13);
 
         console.log(internalXmin);
         console.log(internalXmax);
         console.log(internalYmin);
         console.log(internalYmax);
 
+        // internal walls
         for (let i = 0; i < numInternal; i++) {
             // Get an x and y coordinate within the bounds
-            let x = this.random.random_range(internalXmin, internalXmax + 1);
-            let y = this.random.random_range(internalYmin, internalYmax + 1);
+            let x = this.random.range_incl(internalXmin, internalXmax);
+            let y = this.random.range_incl(internalYmin, internalYmax);
 
             // Get a random direction
-            let dir = this.random.random_range(0, 4);
+            let dir = this.random.range_incl(0, 3);
             
             // don't land in the pairs of the center four squares
             while (this.inMiddleSquare(x,y)) {
                 console.log("trying again");
-                x = this.random.random_range(internalXmin, internalXmax + 1);
-                y = this.random.random_range(internalYmin, internalYmax + 1);
+                x = this.random.range_incl(internalXmin, internalXmax);
+                y = this.random.range_incl(internalYmin, internalYmax);
             }
             console.log("x: " + x + " y: " + y);
-            this.board[x][y].walls.push(this.dirs[dir]);
-            this.completeWall(this.board[x][y], x, y);
+            this.board[y][x].walls.push(this.dirs[dir]);
+            this.completeWall(this.board[y][x], y, x);
             console.log("Set direction " + this.dirs[dir] + " at coordinate point (" + x + ", " + y + ")");
         }
+
+        /*
+        =========================================
+        External walls
+        =========================================
+        */
+        // top left
+        let x = this.random.range_incl(2,6);
+        let y = 0;
+
+        this.board[y][x].walls.push(this.dirs[this.random.range_incl(2,3)]);
+        this.completeWall(this.board[y][x], y, x);
+
+        x = 0;
+        y = this.random.range_incl(2,6);
+        
+        this.board[y][x].walls.push(this.dirs[this.random.range_incl(0,1)]);
+        this.completeWall(this.board[y][x], y, x);
+
+        // top right
+        x = this.random.range_incl(9,13);
+        y = 0;
+
+        this.board[y][x].walls.push(this.dirs[this.random.range_incl(2,3)]);
+        this.completeWall(this.board[y][x], y, x);
+
+        x = 15;
+        y = this.random.range_incl(2,6);
+        
+        this.board[y][x].walls.push(this.dirs[this.random.range_incl(0,1)]);
+        this.completeWall(this.board[y][x], y, x);
+
+        // btm left
+        x = this.random.range_incl(2,6);
+        y = 15;
+
+        this.board[y][x].walls.push(this.dirs[this.random.range_incl(2,3)]);
+        this.completeWall(this.board[y][x], y, x);
+
+        x = 0;
+        y = this.random.range_incl(9,13);
+        
+        this.board[y][x].walls.push(this.dirs[this.random.range_incl(0,1)]);
+        this.completeWall(this.board[y][x], y, x);
+
+        // btm right
+        x = this.random.range_incl(9,13);
+        y = 15;
+
+        this.board[y][x].walls.push(this.dirs[this.random.range_incl(2,3)]);
+        this.completeWall(this.board[y][x], y, x);
+
+        x = 15;
+        y = this.random.range_incl(9,13);
+        
+        this.board[y][x].walls.push(this.dirs[this.random.range_incl(0,1)]);
+        this.completeWall(this.board[y][x], y, x);
+
+        /*
+        =========================================
+        Center cube
+        =========================================
+        */
+       this.board[7][7].walls.push('n', 'w');
+       this.completeWall(this.board[7][7], 7, 7);
+
+       this.board[7][8].walls.push('n', 'e');
+       this.completeWall(this.board[7][8], 7, 8);
+
+       this.board[8][7].walls.push('s', 'w');
+       this.completeWall(this.board[8][7], 8, 7);
+
+       this.board[8][8].walls.push('s', 'e');
+       this.completeWall(this.board[8][8], 8, 8);
+
     }
 
     /**
@@ -134,6 +215,7 @@ class Generator {
     }
 
     populateBoard(targetCont, targets, robotCont, robots, wallCont, walls, id) {
+        let wIndex = 0;
         for(let i = 0; i < 16; i++) {
             for (let j = 0; j < 16; j++) {
                 let cell = this.board[j][i];
@@ -144,27 +226,24 @@ class Generator {
                 // fill targets
 
                 // fill walls
-                let index = 0;
                 for (let wall in cell.walls) {
                     switch(cell.walls[wall]) {
                         case 'n':
-                            walls[index] = new Wall(wallCont, id["wall_north.png"], "n", "North", x, y);
+                            walls[wIndex] = new Wall(wallCont, id["wall_north.png"], "n", "North", x, y);
                             break;
                         case 's':
-                            walls[index] = new Wall(wallCont, id["wall_south.png"], "s", "South", x, y);
+                            walls[wIndex] = new Wall(wallCont, id["wall_south.png"], "s", "South", x, y);
                             break;
                         case 'w':
-                            walls[index] = new Wall(wallCont, id["wall_west.png"], "w", "West", x, y);
+                            walls[wIndex] = new Wall(wallCont, id["wall_west.png"], "w", "West", x, y);
                             break;
                         case 'e':
-                            walls[index] = new Wall(wallCont, id["wall_east.png"], "e", "East", x, y);
+                            walls[wIndex] = new Wall(wallCont, id["wall_east.png"], "e", "East", x, y);
                             break;
                     }
+                    wIndex++;
                 }
             }
         }   
     }
-
-
-
 }
