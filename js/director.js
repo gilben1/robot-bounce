@@ -178,7 +178,7 @@ class Director {
     }
 
     generateBoard() {
-        this.generator.wallsGenerate();
+        this.generator.generateWalls();
         this.generator.populateBoard(this.targetCont, this.targets, this.robotCont, this.robots, this.wallCont, this.walls, this.id);
     }
 

@@ -6,10 +6,10 @@ class Generator {
         'r', 'g', 'b', 'y'
     ]
     tiles = [
-        'r0','r0','r0','r0',
-        'g0','g0','g0','g0',
-        'b0','b0','b0','b0',
-        'y0','y0','y0','y0'
+        'r0','r1','r2','r3',
+        'g0','g1','g2','g3',
+        'b0','b1','b2','b3',
+        'y0','y1','y2','y3', 'w'
     ]
     dirs = [
         'n', 's', 'e', 'w'
@@ -57,7 +57,7 @@ class Generator {
         }
     }    
 
-    wallsGenerate() {
+    generateWalls() {
         /*
         =========================================
         Internal walls
@@ -225,8 +225,6 @@ class Generator {
         }
     }
 
-
-
     inMiddleSquare(x,y) {
         //return (x == 7 && y == 7) || (x == 7 && y == 8) || (x == 8 && y == 7) || (x == 8 && y == 8);
         return (x == 6 && (this.ignored.indexOf(y) !== -1))
@@ -234,6 +232,61 @@ class Generator {
             || (x == 8 && (this.ignored.indexOf(y) !== -1))
             || (x == 9 && (this.ignored.indexOf(y) !== -1))
     }
+
+    generateTargets() {
+        // Outer ring, moving inward
+        let numRing1 = 2;
+        let numRing2 = 7;
+        let numRing3 = 4;
+        let numRing4 = 2;
+        let numRing5 = 1;
+        let numRing6 = 1;
+
+        // one inner ring
+        for (let i = 0; i < numRing2; i++) {
+            let tile = this.tiles.splice(this.random.range_incl(0, this.tiles.length - 1));
+            let dir1 = this.dirs[this.random.range_incl(0,3)];
+            let dir2 = "";
+            // based on the first value, randomly determine the second value
+            switch(dir1) {
+                case 'n':
+                case 's':
+                    dir2 = this.dirs[this.random.range_incl(2,3)];
+                    break;
+                case 'e':
+                case 'w':
+                    dir2 = this.dirs[this.random.range_incl(0,1)];
+                    break;
+            }
+
+            // generate a random x and y
+            let x = this.random.range_incl(1, 14);
+            let y = this.random.range_incl(1, 14);
+            // if we land x on the edge, don't care about generated y value
+            if (x === 1) { y = 1; }
+            else if (x === 14) { y = 14; }  
+            this.board[y][x].walls.push(dir1, dir2);
+            this.completeWall(this.board[y][x], y, x);
+            this.board[y][x].tile = tile;
+        }
+    }
+
+    /**
+     * Retreives all cells within a specified bounds from the board
+     * @param {*} xMin 
+     * @param {*} yMin 
+     * @param {*} xMax 
+     * @param {*} yMax 
+     */
+    getCells(xMin, yMin, xMax, yMax) {
+        let retVal = []
+        for (let y = yMin; y <= yMax; y++) {
+            for (let x = xMin; y <= xMax; x++) {
+                retVal.push(this.board[y][x]);
+            }
+        }
+    }
+
 
     populateBoard(targetCont, targets, robotCont, robots, wallCont, walls, id) {
         let wIndex = 0;
