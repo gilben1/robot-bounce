@@ -63,7 +63,38 @@ class Generator {
         Internal walls
         =========================================
         */
+        this.generateInternalWalls();
 
+        /*
+        =========================================
+        External walls
+        =========================================
+        */
+        this.generateExternalWalls();
+
+        /*
+        =========================================
+        Center cube
+        =========================================
+        */
+       this.board[7][7].walls.push('n', 'w');
+       this.completeWall(this.board[7][7], 7, 7);
+
+       this.board[7][8].walls.push('n', 'e');
+       this.completeWall(this.board[7][8], 7, 8);
+
+       this.board[8][7].walls.push('s', 'w');
+       this.completeWall(this.board[8][7], 8, 7);
+
+       this.board[8][8].walls.push('s', 'e');
+       this.completeWall(this.board[8][8], 8, 8);
+
+    }
+
+    /**
+     * Generates the internal walls that do not contain targets
+     */
+    generateInternalWalls() {
         let numInternal = this.random.range_incl(0, 3);
         console.log("num: " + numInternal);
 
@@ -87,23 +118,30 @@ class Generator {
             // Get a random direction
             let dir = this.random.range_incl(0, 3);
             
+            let timeout = 0;
             // don't land in the pairs of the center four squares
-            while (this.inMiddleSquare(x,y)) {
+            while (this.inMiddleSquare(x,y) && timeout < 200) {
                 console.log("trying again");
                 x = this.random.range_incl(internalXmin, internalXmax);
                 y = this.random.range_incl(internalYmin, internalYmax);
+                timeout++;
             }
+            // If we keep falling into the same middle block, just get out of there
+            if (timeout >= 200) {
+                continue;
+            }
+
             console.log("x: " + x + " y: " + y);
             this.board[y][x].walls.push(this.dirs[dir]);
             this.completeWall(this.board[y][x], y, x);
             console.log("Set direction " + this.dirs[dir] + " at coordinate point (" + x + ", " + y + ")");
         }
+    }
 
-        /*
-        =========================================
-        External walls
-        =========================================
-        */
+    /**
+     * Generates the external walls on the border of the board
+     */
+    generateExternalWalls() {
         // top left
         let x = this.random.range_incl(2,6);
         let y = 0;
@@ -155,25 +193,8 @@ class Generator {
         
         this.board[y][x].walls.push(this.dirs[this.random.range_incl(0,1)]);
         this.completeWall(this.board[y][x], y, x);
-
-        /*
-        =========================================
-        Center cube
-        =========================================
-        */
-       this.board[7][7].walls.push('n', 'w');
-       this.completeWall(this.board[7][7], 7, 7);
-
-       this.board[7][8].walls.push('n', 'e');
-       this.completeWall(this.board[7][8], 7, 8);
-
-       this.board[8][7].walls.push('s', 'w');
-       this.completeWall(this.board[8][7], 8, 7);
-
-       this.board[8][8].walls.push('s', 'e');
-       this.completeWall(this.board[8][8], 8, 8);
-
     }
+
 
     /**
      * Adds a section of wall in the adjacent cell to all walls in the existing cell
