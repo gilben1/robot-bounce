@@ -9,8 +9,36 @@ class Generator {
         'r0','r1','r2','r3',
         'g0','g1','g2','g3',
         'b0','b1','b2','b3',
-        'y0','y1','y2','y3', 'w'
+        'y0','y1','y2','y3', 'w4'
     ]
+
+
+
+    targetMap = {
+        "r": "_red",
+        "b": "_blue",
+        "g": "_green",
+        "y": "_yellow",
+        "0": "bolt",
+        "1": "crescent",
+        "2": "cross",
+        "3": "diam",
+        "w": "wild"
+    }
+
+    displayMap = {
+        "r": "Red",
+        "b": "Blue",
+        "g": "Green",
+        "y": "Yellow",
+        "0": "Bolt",
+        "1": "Crescent",
+        "2": "Cross",
+        "3": "Diamond",
+        "4": ""
+    }
+
+
     dirs = [
         'n', 's', 'e', 'w'
     ]
@@ -243,8 +271,19 @@ class Generator {
         let numRing6 = 1;
 
         // one inner ring
-        for (let i = 0; i < numRing2; i++) {
-            let tile = this.tiles.splice(this.random.range_incl(0, this.tiles.length - 1));
+        this.populateRing(numRing2, 1, 14);
+    }
+
+    /**
+     * Populates the ring between the low and high bounds with targets
+     * @param {*} numTargets 
+     * @param {*} lowBound 
+     * @param {*} highBound 
+     */
+    populateRing(numTargets, lowBound, highBound) {
+        for (let i = 0; i < numTargets; i++) {
+            let tile = this.tiles.splice(this.random.range_incl(0, this.tiles.length - 1), 1)[0];
+            console.log(tile);
             let dir1 = this.dirs[this.random.range_incl(0,3)];
             let dir2 = "";
             // based on the first value, randomly determine the second value
@@ -260,14 +299,21 @@ class Generator {
             }
 
             // generate a random x and y
-            let x = this.random.range_incl(1, 14);
-            let y = this.random.range_incl(1, 14);
-            // if we land x on the edge, don't care about generated y value
-            if (x === 1) { y = 1; }
-            else if (x === 14) { y = 14; }  
+            let x = this.random.range_incl(lowBound,highBound);
+            let y = this.random.range_incl(lowBound,highBound); 
+            // if we land x on the edge, generate a random y in the range
+            if (x !== lowBound && x !== highBound) { 
+                if (y > ((lowBound + highBound) / 2)) {
+                    y = highBound;
+                }
+                else {
+                    y = lowBound;
+                }
+            }
+
             this.board[y][x].walls.push(dir1, dir2);
             this.completeWall(this.board[y][x], y, x);
-            this.board[y][x].tile = tile;
+            this.board[y][x].target = tile;
         }
     }
 
@@ -290,6 +336,7 @@ class Generator {
 
     populateBoard(targetCont, targets, robotCont, robots, wallCont, walls, id) {
         let wIndex = 0;
+        let tIndex = 0;
         for(let i = 0; i < 16; i++) {
             for (let j = 0; j < 16; j++) {
                 let cell = this.board[j][i];
@@ -298,6 +345,17 @@ class Generator {
                 // fill robots
 
                 // fill targets
+                if (cell.target != null) {
+                    console.log("boink");
+                    console.log(cell.target[0] + " " + cell.target[1]);
+                    let fileName = this.targetMap[cell.target[1]] + this.targetMap[cell.target[0]] + ".png";
+                    let shortName = this.targetMap[cell.target[1]] + cell.target[0];
+                    let displayName = this.displayMap[cell.target[0]] + " " + this.displayMap[cell.target[1]];
+                    console.log(fileName + " " + shortName + " " + displayName);
+
+                    targets[tIndex] = new Target(targetCont, id[fileName], shortName, displayName, x, y);
+                    tIndex++;
+                }
 
                 // fill walls
                 for (let wall in cell.walls) {

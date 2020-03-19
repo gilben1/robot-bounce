@@ -126,7 +126,7 @@ class Director {
                 this.scoreBoard.updateMoveText();
 
                 if (this.activeTarget === undefined) {
-                    this.activeTarget = this.targets[randomInt(0, 17)];
+                    //this.activeTarget = this.targets[randomInt(0, 17)];
                 }
 
                 if (this.activeRobot === undefined) {
@@ -179,6 +179,7 @@ class Director {
 
     generateBoard() {
         this.generator.generateWalls();
+        this.generator.generateTargets();
         this.generator.populateBoard(this.targetCont, this.targets, this.robotCont, this.robots, this.wallCont, this.walls, this.id);
     }
 

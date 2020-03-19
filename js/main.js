@@ -45,7 +45,7 @@ loader
         director.renderTiles();
 
         // Load up the targets
-        director.loadEntities(fillTargets, 'data/targets.txt', director.targetCont, director.targets);
+        //director.loadEntities(fillTargets, 'data/targets.txt', director.targetCont, director.targets);
 
         // Load up the walls
         //director.loadEntities(fillWalls, 'data/grid.txt', director.wallCont, director.walls);
