@@ -272,6 +272,10 @@ class Generator {
 
         // one inner ring
         this.populateRing(numRing2, 1, 14);
+        this.populateRing(numRing3, 2, 13);
+        this.populateRing(numRing4, 3, 12);
+        this.populateRing(numRing5, 4, 11);
+        this.populateRing(numRing6, 5, 10);
     }
 
     /**
