@@ -234,18 +234,31 @@ class Generator {
         for (let wall in cell.walls) {
             switch(cell.walls[wall]) {
                 case 'n':
+                    // bounds checking
+                    if (this.board[y - 1] === undefined) {
+                        break;
+                    }
                     this.board[y - 1][x].walls.push('s');
                     console.log("Set direction s at coordinate point (" + (y-1) + ", " + x + ")");
                     break;
                 case 's':
+                    if (this.board[y + 1] === undefined) {
+                        break;
+                    }
                     this.board[y + 1][x].walls.push('n');
                     console.log("Set direction n at coordinate point (" + (y+1) + ", " + x + ")");
                     break;
                 case 'w':
+                    if (this.board[y][x - 1] === undefined) {
+                        break;
+                    }
                     this.board[y][x - 1].walls.push('e');
                     console.log("Set direction e at coordinate point (" + y + ", " + (x-1) + ")");
                     break;
                 case 'e':
+                    if (this.board[y][x + 1] === undefined) {
+                        break;
+                    }
                     this.board[y][x + 1].walls.push('w');
                     console.log("Set direction w at coordinate point (" + y + ", " + (x+1) + ")");
                     break;
@@ -271,6 +284,7 @@ class Generator {
         let numRing6 = 1;
 
         // one inner ring
+        this.populateRing(numRing1, 0, 15);
         this.populateRing(numRing2, 1, 14);
         this.populateRing(numRing3, 2, 13);
         this.populateRing(numRing4, 3, 12);
